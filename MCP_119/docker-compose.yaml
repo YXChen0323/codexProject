@@ -30,5 +30,23 @@ services:
     ports:
       - "11434:11434"
 
+  fastapi:
+    build:
+      context: ./backend
+    container_name: fastapi
+    ports:
+      - "8000:8000"
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend/home/build:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - fastapi
+
 volumes:
   postgres_data:
