@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import Loader from './Loader';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -97,10 +98,11 @@ function App() {
           placeholder="Enter your question"
         />
         <button type="submit" disabled={loading}>
-          {loading ? 'Loading...' : 'Submit'}
+          {loading ? <Loader /> : 'Submit'}
         </button>
       </form>
       <div className="query-result">
+        {loading && <Loader />}
         {error && <p className="error">{error}</p>}
         {sql && (
           <pre className="generated-sql">{sql}</pre>
