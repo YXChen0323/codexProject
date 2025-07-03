@@ -34,6 +34,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 @app.post("/query")
+@app.post("/api/query")
 async def handle_query(request: QueryRequest):
     """Receive a user query and wrap it in JSON-RPC format."""
     rpc_payload = {
