@@ -30,7 +30,7 @@ services:
     ports:
       - "11434:11434"
     volumes:
-      - ollama_data:/root/.ollama
+      - ./valumes/ollama_data:/root/.ollama
 
   fastapi:
     build:
@@ -47,6 +47,7 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+      - ollama
 
   nginx:
     image: nginx:alpine
