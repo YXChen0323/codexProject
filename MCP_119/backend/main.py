@@ -161,7 +161,10 @@ async def get_summary(user_id: str):
 @app.post("/api/sql")
 async def generate_sql(request: SQLRequest):
     """Generate an SQL query (including PostGIS syntax) using an LLM."""
-    sql = sql_generator.generate_sql(request.question)
+    try:
+        sql = sql_generator.generate_sql(request.question)
+    except ValueError as exc:
+        return {"error": str(exc)}
     return {"sql": sql}
 
 
