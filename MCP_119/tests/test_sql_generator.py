@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
 from urllib import request as urlrequest
 import json
 import sql_generator
+import pytest
 
 
 class FakeResponse:
@@ -29,3 +30,12 @@ def test_generate_sql(monkeypatch):
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
     sql = sql_generator.generate_sql("test question")
     assert sql == "SELECT 1;"
+
+
+def test_generate_sql_invalid(monkeypatch):
+    def fake_urlopen(req):
+        return FakeResponse(json.dumps({"response": "列出前五筆資料"}).encode())
+
+    monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
+    with pytest.raises(ValueError):
+        sql_generator.generate_sql("bad question")
