@@ -4,9 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import jsonrpc
 from .model_router import ModelRouter
 from . import prompt_templates
+from .context_manager import ConversationContext
 
 app = FastAPI()
 router = ModelRouter()
+context_manager = ConversationContext()
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,6 +32,12 @@ class PromptRequest(BaseModel):
     model: str
     task: str
     query: str
+
+
+class RecordRequest(BaseModel):
+    user_id: str
+    query: str
+    response: str
 
 @app.get("/hello")
 async def read_root():
@@ -72,3 +80,27 @@ async def build_prompt(request: PromptRequest):
     template = prompt_templates.load_template(request.model, request.task)
     prompt = prompt_templates.fill_template(template, request.query)
     return {"prompt": prompt}
+
+
+@app.post("/context/record")
+@app.post("/api/context/record")
+async def record_interaction(request: RecordRequest):
+    """Record a user query and response in the conversation context."""
+    context_manager.record(request.user_id, request.query, request.response)
+    return {"status": "ok"}
+
+
+@app.get("/context/history")
+@app.get("/api/context/history")
+async def get_history(user_id: str):
+    """Return the message history for a user."""
+    messages = context_manager.get_history(user_id)
+    return {"history": [m.__dict__ for m in messages]}
+
+
+@app.get("/context/summary")
+@app.get("/api/context/summary")
+async def get_summary(user_id: str):
+    """Return a summary of the conversation history for a user."""
+    summary = context_manager.summarize(user_id)
+    return {"summary": summary}
