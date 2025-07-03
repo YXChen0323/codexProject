@@ -27,7 +27,7 @@ def generate_sql(question: str, *, model: str | None = None) -> str:
 
     req = urlrequest.Request(
         OLLAMA_URL,
-        data=json.dumps({"model": model, "prompt": prompt}).encode(),
+        data=json.dumps({"model": model, "prompt": prompt, "stream": False}).encode(),
         headers={"Content-Type": "application/json"},
         method="POST",
     )
