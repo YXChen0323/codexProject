@@ -7,7 +7,7 @@ from context_manager import ConversationContext
 
 
 def test_record_and_history():
-    ctx = ConversationContext()
+    ctx = ConversationContext(db_path=":memory:")
     ctx.record("alice", "hi", "hello")
     history = ctx.get_history("alice")
     assert len(history) == 2
@@ -16,7 +16,7 @@ def test_record_and_history():
 
 
 def test_summary():
-    ctx = ConversationContext()
+    ctx = ConversationContext(db_path=":memory:")
     for i in range(3):
         ctx.record("bob", f"q{i}", f"a{i}")
     summary = ctx.summarize("bob", max_chars=50)
