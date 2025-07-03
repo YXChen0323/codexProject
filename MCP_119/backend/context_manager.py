@@ -66,5 +66,13 @@ class ConversationContext:
         text = " ".join(f"{m.role}: {m.content}" for m in messages)
         return shorten(text, width=max_chars, placeholder="...")
 
+    def reset(self, user_id: str) -> None:
+        """Clear all stored messages for the given user."""
+        with self._conn:
+            self._conn.execute(
+                "DELETE FROM messages WHERE user_id=?",
+                (user_id,),
+            )
+
     def close(self) -> None:
         self._conn.close()

@@ -43,6 +43,14 @@ class RecordRequest(BaseModel):
     response: str
 
 
+class RetrieveRequest(BaseModel):
+    user_id: str
+
+
+class ResetRequest(BaseModel):
+    user_id: str
+
+
 class SQLRequest(BaseModel):
     question: str
 
@@ -99,6 +107,22 @@ async def build_prompt(request: PromptRequest):
 async def record_interaction(request: RecordRequest):
     """Record a user query and response in the conversation context."""
     context_manager.record(request.user_id, request.query, request.response)
+    return {"status": "ok"}
+
+
+@app.post("/context/retrieve")
+@app.post("/api/context/retrieve")
+async def retrieve_history(request: RetrieveRequest):
+    """Retrieve the conversation history for a user."""
+    messages = context_manager.get_history(request.user_id)
+    return {"history": [m.__dict__ for m in messages]}
+
+
+@app.post("/context/reset")
+@app.post("/api/context/reset")
+async def reset_history(request: ResetRequest):
+    """Delete all conversation history for a user."""
+    context_manager.reset(request.user_id)
     return {"status": "ok"}
 
 
