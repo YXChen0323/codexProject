@@ -4,6 +4,8 @@ import './App.css';
 function App() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
+  const [sql, setSql] = useState('');
+  const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [models, setModels] = useState([]);
@@ -36,6 +38,8 @@ function App() {
     setLoading(true);
     setError(null);
     setResult(null);
+    setSql('');
+    setSummary('');
     try {
       const sqlResp = await fetch('/api/sql', {
         method: 'POST',
@@ -49,6 +53,7 @@ function App() {
       if (sqlData.error) {
         throw new Error(sqlData.error);
       }
+      setSql(sqlData.sql);
       const response = await fetch('/api/sql/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,7 +70,9 @@ function App() {
       if (data.error) {
         setError(data.error.message || 'Server error');
       } else {
-        setResult(data.result ?? data);
+        setResult(data.result?.results || data.results || []);
+        setSummary(data.result?.summary || data.summary || '');
+        setSql(data.result?.sql || sqlData.sql);
       }
     } catch (err) {
       setError(err.message);
@@ -95,6 +102,9 @@ function App() {
       </form>
       <div className="query-result">
         {error && <p className="error">{error}</p>}
+        {sql && (
+          <pre className="generated-sql">{sql}</pre>
+        )}
         {Array.isArray(result) ? (
           <table className="result-table">
             <thead>
@@ -117,6 +127,7 @@ function App() {
         ) : (
           result && <pre>{JSON.stringify(result, null, 2)}</pre>
         )}
+        {summary && <p className="summary">{summary}</p>}
       </div>
     </div>
   );

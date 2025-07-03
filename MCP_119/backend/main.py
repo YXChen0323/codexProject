@@ -1,5 +1,6 @@
 from fastapi import FastAPI, WebSocket
 from pydantic import BaseModel
+from utils import summarize_results
 import json
 from fastapi.middleware.cors import CORSMiddleware
 import jsonrpc
@@ -183,4 +184,10 @@ async def execute_sql(request: SQLExecuteRequest):
         )
     if request.user_id:
         context_manager.record(request.user_id, request.query, json.dumps(results))
-    return jsonrpc.build_response(result={"results": results, "model": request.model})
+    summary = summarize_results(results)
+    return jsonrpc.build_response(result={
+        "results": results,
+        "model": request.model,
+        "sql": request.query,
+        "summary": summary,
+    })
