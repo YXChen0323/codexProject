@@ -37,10 +37,22 @@ function App() {
     setError(null);
     setResult(null);
     try {
+      const sqlResp = await fetch('/api/sql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: query, model })
+      });
+      if (!sqlResp.ok) {
+        throw new Error('Failed to generate SQL');
+      }
+      const sqlData = await sqlResp.json();
+      if (sqlData.error) {
+        throw new Error(sqlData.error);
+      }
       const response = await fetch('/api/sql/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, model })
+        body: JSON.stringify({ query: sqlData.sql, model })
       });
       if (!response.ok) {
         const data = await response.json().catch(() => null);
