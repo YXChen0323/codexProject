@@ -60,6 +60,12 @@ class SQLExecuteRequest(BaseModel):
     user_id: str | None = None
     model: str | None = None
 
+@app.get("/")
+async def root():
+    """Return a simple greeting for the API root."""
+    return {"message": "Welcome"}
+
+
 @app.get("/hello")
 async def read_root():
     return {"message": "Hello from FastAPI"}
