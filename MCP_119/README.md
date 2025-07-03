@@ -8,6 +8,10 @@ This directory contains the `docker-compose.yaml` file that sets up the followin
 - **FastAPI** - simple API server.
 - **Nginx** - reverse proxy exposing the API under `/api/`.
 
+The `fastapi` service connects to the PostgreSQL container using environment
+variables defined in `docker-compose.yaml`. If you need to customise the
+database credentials, update these variables accordingly.
+
 Start the stack:
 
 ```bash
