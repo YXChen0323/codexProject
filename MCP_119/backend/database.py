@@ -29,3 +29,28 @@ def execute_query(query: str) -> list[dict]:
             return [dict(row) for row in rows]
     finally:
         conn.close()
+
+
+def describe_schema() -> str:
+    """Return a simple text description of tables and columns in the database."""
+    conn = _get_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT table_name, column_name
+                FROM information_schema.columns
+                WHERE table_schema = 'public'
+                ORDER BY table_name, ordinal_position
+                """
+            )
+            rows = cur.fetchall()
+    finally:
+        conn.close()
+
+    tables: dict[str, list[str]] = {}
+    for row in rows:
+        tables.setdefault(row["table_name"], []).append(row["column_name"])
+    return "; ".join(
+        f"{tbl}({', '.join(cols)})" for tbl, cols in tables.items()
+    )
