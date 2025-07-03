@@ -7,21 +7,24 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     "phi3:3.8b": {
         "sql": (
             "Given the database schema:\n{schema}\n"
-            "Write an SQL query for: {query}"
+            "Write an SQL query for: {query}\n"
+            "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
     },
     "qwen2.5-coder:7b": {
         # Used for SQL generation and human friendly responses
         "sql": (
             "Given the database schema:\n{schema}\n"
-            "Write an SQL query for: {query}"
+            "Write an SQL query for: {query}\n"
+            "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
         "nlp": "Answer the following question: {query}",
     },
     "sqlcoder:7b": {
         "sql": (
             "Given the database schema:\n{schema}\n"
-            "Write an SQL query for: {query}"
+            "Write an SQL query for: {query}\n"
+            "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
     },
 }
