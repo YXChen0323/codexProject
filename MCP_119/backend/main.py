@@ -1,5 +1,6 @@
 from fastapi import FastAPI, WebSocket
 from pydantic import BaseModel
+import json
 from fastapi.middleware.cors import CORSMiddleware
 from . import jsonrpc
 from .model_router import ModelRouter
@@ -48,6 +49,7 @@ class SQLRequest(BaseModel):
 
 class SQLExecuteRequest(BaseModel):
     query: str
+    user_id: str | None = None
 
 @app.get("/hello")
 async def read_root():
@@ -127,6 +129,8 @@ async def generate_sql(request: SQLRequest):
 @app.post("/sql/execute")
 @app.post("/api/sql/execute")
 async def execute_sql(request: SQLExecuteRequest):
-    """Execute a SQL query and return the results as JSON."""
+    """Execute a SQL query, store the result, and return a JSON-RPC response."""
     results = database.execute_query(request.query)
-    return {"results": results}
+    if request.user_id:
+        context_manager.record(request.user_id, request.query, json.dumps(results))
+    return jsonrpc.build_response(result={"results": results})
