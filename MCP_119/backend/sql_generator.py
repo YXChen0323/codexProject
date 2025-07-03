@@ -4,6 +4,7 @@ import re
 from urllib import request as urlrequest
 import prompt_templates
 import model_router
+import database
 
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
@@ -23,7 +24,8 @@ def generate_sql(question: str, *, model: str | None = None) -> str:
         model = model_router.ModelRouter().route(task_type="sql")
 
     template = prompt_templates.load_template(model, "sql")
-    prompt = prompt_templates.fill_template(template, question)
+    schema = database.describe_schema()
+    prompt = prompt_templates.fill_template(template, question, schema=schema)
 
     req = urlrequest.Request(
         OLLAMA_URL,

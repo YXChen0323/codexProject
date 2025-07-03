@@ -7,6 +7,7 @@ from urllib import request as urlrequest
 import json
 import sql_generator
 import pytest
+import database
 
 
 class FakeResponse:
@@ -28,6 +29,7 @@ def test_generate_sql(monkeypatch):
         return FakeResponse(json.dumps({"response": "SELECT 1;"}).encode())
 
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
+    monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
     sql = sql_generator.generate_sql("test question")
     assert sql == "SELECT 1;"
 
@@ -37,6 +39,7 @@ def test_generate_sql_invalid(monkeypatch):
         return FakeResponse(json.dumps({"response": "列出前五筆資料"}).encode())
 
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
+    monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
     with pytest.raises(ValueError):
         sql_generator.generate_sql("bad question")
 
@@ -51,5 +54,6 @@ def test_generate_sql_streaming(monkeypatch):
         return FakeResponse(data.encode())
 
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
+    monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
     sql = sql_generator.generate_sql("question")
     assert sql == "SELECT 1;"
