@@ -1,11 +1,12 @@
 import json
+import os
 import re
 from urllib import request as urlrequest
 import prompt_templates
 import model_router
 
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
 
 
 SQL_START = re.compile(r"^(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|WITH)\b", re.IGNORECASE)

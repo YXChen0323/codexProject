@@ -12,6 +12,11 @@ The `fastapi` service connects to the PostgreSQL container using environment
 variables defined in `docker-compose.yaml`. If you need to customise the
 database credentials, update these variables accordingly.
 
+The API container also communicates with the Ollama service. By default the
+backend expects Ollama to be reachable at `http://localhost:11434`. When using
+Docker Compose, the `OLLAMA_URL` environment variable is set so the backend
+calls the `ollama` container instead.
+
 Start the stack:
 
 ```bash
