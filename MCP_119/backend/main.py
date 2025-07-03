@@ -169,7 +169,12 @@ async def generate_sql(request: SQLRequest):
 @app.post("/api/sql/execute")
 async def execute_sql(request: SQLExecuteRequest):
     """Execute a SQL query, store the result, and return a JSON-RPC response."""
-    results = database.execute_query(request.query)
+    try:
+        results = database.execute_query(request.query)
+    except Exception as exc:  # pragma: no cover - depends on environment
+        return jsonrpc.build_response(
+            error={"code": -32000, "message": str(exc)}
+        )
     if request.user_id:
         context_manager.record(request.user_id, request.query, json.dumps(results))
     return jsonrpc.build_response(result={"results": results, "model": request.model})
