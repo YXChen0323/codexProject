@@ -1,8 +1,7 @@
-from uuid import uuid4
-
 from fastapi import FastAPI, WebSocket
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from . import jsonrpc
 
 app = FastAPI()
 
@@ -37,10 +36,8 @@ async def websocket_endpoint(websocket: WebSocket):
 @app.post("/api/query")
 async def handle_query(request: QueryRequest):
     """Receive a user query and wrap it in JSON-RPC format."""
-    rpc_payload = {
-        "jsonrpc": "2.0",
-        "method": "query",
-        "params": {"query": request.query},
-        "id": str(uuid4()),
-    }
+    rpc_payload = jsonrpc.build_request(
+        method="query",
+        params={"query": request.query},
+    )
     return rpc_payload
