@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from textwrap import shorten
-from typing import List, Dict
+from typing import List
+import sqlite3
 
 
 @dataclass
@@ -15,22 +15,56 @@ class Message:
 
 
 class ConversationContext:
-    """In-memory conversation context manager."""
+    """SQLite-backed conversation context manager."""
 
-    def __init__(self) -> None:
-        self._history: Dict[str, List[Message]] = defaultdict(list)
+    def __init__(self, db_path: str = "conversation.db") -> None:
+        self._conn = sqlite3.connect(db_path, check_same_thread=False)
+        self._conn.row_factory = sqlite3.Row
+        self._create_table()
+
+    def _create_table(self) -> None:
+        with self._conn:
+            self._conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS messages (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT,
+                    role TEXT,
+                    content TEXT,
+                    timestamp TEXT
+                )
+                """
+            )
 
     def record(self, user_id: str, query: str, response: str) -> None:
         """Store a user query and assistant response."""
-        self._history[user_id].append(Message("user", query))
-        self._history[user_id].append(Message("assistant", response))
+        with self._conn:
+            self._conn.execute(
+                "INSERT INTO messages (user_id, role, content, timestamp) VALUES (?, ?, ?, ?)",
+                (user_id, "user", query, datetime.utcnow().isoformat()),
+            )
+            self._conn.execute(
+                "INSERT INTO messages (user_id, role, content, timestamp) VALUES (?, ?, ?, ?)",
+                (user_id, "assistant", response, datetime.utcnow().isoformat()),
+            )
 
     def get_history(self, user_id: str) -> List[Message]:
         """Return the message history for a user."""
-        return list(self._history.get(user_id, []))
+        cur = self._conn.execute(
+            "SELECT role, content, timestamp FROM messages WHERE user_id=? ORDER BY id",
+            (user_id,),
+        )
+        rows = cur.fetchall()
+        return [
+            Message(row["role"], row["content"], datetime.fromisoformat(row["timestamp"]))
+            for row in rows
+        ]
 
     def summarize(self, user_id: str, max_chars: int = 200) -> str:
         """Return a simple summary of the conversation history."""
-        messages = self._history.get(user_id, [])
+        messages = self.get_history(user_id)
         text = " ".join(f"{m.role}: {m.content}" for m in messages)
         return shorten(text, width=max_chars, placeholder="...")
+
+    def close(self) -> None:
+        self._conn.close()

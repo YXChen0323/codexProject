@@ -8,7 +8,7 @@ from context_manager import ConversationContext
 
 
 def test_build_prompt_with_history():
-    ctx = ConversationContext()
+    ctx = ConversationContext(db_path=":memory:")
     ctx.record("alice", "hi", "hello")
     ctx.record("alice", "how are you", "fine")
     history = ctx.get_history("alice")
