@@ -15,7 +15,8 @@ database credentials, update these variables accordingly.
 The API container also communicates with the Ollama service. By default the
 backend expects Ollama to be reachable at `http://localhost:11434`. When using
 Docker Compose, the `OLLAMA_URL` environment variable is set so the backend
-calls the `ollama` container instead.
+calls the `ollama` container instead. The backend disables streaming when
+requesting a response from Ollama so a complete JSON payload is returned.
 
 Start the stack:
 
