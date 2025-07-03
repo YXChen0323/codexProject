@@ -29,3 +29,18 @@
 .error {
   color: red;
 }
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-table th,
+.result-table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+}
+
+.result-table th {
+  background-color: #f0f0f0;
+}
