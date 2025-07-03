@@ -39,3 +39,31 @@ def test_generate_sql_invalid(monkeypatch):
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
     with pytest.raises(ValueError):
         sql_generator.generate_sql("bad question")
+
+
+def test_generate_sql_streaming(monkeypatch):
+    data = "\n".join([
+        json.dumps({"response": "SELECT ", "done": False}),
+        json.dumps({"response": "1;", "done": True}),
+    ])
+
+    def fake_urlopen(req):
+        return FakeResponse(data.encode())
+
+    monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
+    sql = sql_generator.generate_sql("question")
+    assert sql == "SELECT 1;"
+
+
+def test_generate_sql_concatenated(monkeypatch):
+    data = "".join([
+        json.dumps({"response": "SELECT ", "done": False}),
+        json.dumps({"response": "1;", "done": True}),
+    ])
+
+    def fake_urlopen(req):
+        return FakeResponse(data.encode())
+
+    monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
+    sql = sql_generator.generate_sql("question")
+    assert sql == "SELECT 1;"
