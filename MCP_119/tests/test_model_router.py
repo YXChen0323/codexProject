@@ -7,7 +7,7 @@ from model_router import ModelRouter
 
 def test_task_type_routing():
     router = ModelRouter()
-    assert router.route(task_type="code") == "phi3-3.8b"
+    assert router.route(task_type="code") == "phi3:3.8b"
 
 
 def test_user_preference_routing():

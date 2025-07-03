@@ -7,11 +7,11 @@ class ModelRouter:
     def __init__(self) -> None:
         # Mapping of task types to model names
         self.task_mapping: Dict[str, str] = {
-            # Qwen2.5-coder-7b handles user facing responses
-            "nlp": "Qwen2.5-coder-7b",
+            # qwen2.5-coder:7b handles user facing responses
+            "nlp": "qwen2.5-coder:7b",
             # All three models generate SQL queries
-            "code": "phi3-3.8b",
-            "sql": "sqlcoder-7b",
+            "code": "phi3:3.8b",
+            "sql": "sqlcoder:7b",
         }
         # Optional user specific preferences
         self.user_mapping: Dict[str, str] = {}
