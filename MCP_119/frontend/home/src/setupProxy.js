@@ -7,7 +7,9 @@ module.exports = function(app) {
       changeOrigin: true,
       pathRewrite: (path, req) => path,
       onProxyReq: (proxyReq, req, res) => {
-        Object.assign(proxyReq.headers, { host: req.headers.host });
+        // In newer Node.js versions, proxyReq.headers may be undefined. Use
+        // setHeader to ensure the host header is forwarded correctly.
+        proxyReq.setHeader('host', req.headers.host);
       }
     })
   );
