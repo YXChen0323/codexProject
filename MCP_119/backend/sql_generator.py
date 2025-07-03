@@ -33,26 +33,30 @@ def generate_sql(question: str, *, model: str | None = None) -> str:
     )
     with urlrequest.urlopen(req) as resp:
         text = resp.read().decode()
+
     try:
         data = json.loads(text)
     except json.JSONDecodeError:
-        # Handle newline-delimited JSON responses by combining chunks
-        chunks = []
-        last_obj = None
-        for line in text.splitlines():
-            line = line.strip()
-            if not line:
-                continue
+        # The response may contain multiple JSON objects without a
+        # surrounding array. Decode them sequentially and merge the
+        # "response" fields to reconstruct the full SQL string.
+        decoder = json.JSONDecoder()
+        remaining = text
+        chunks: list[str] = []
+        last_obj: dict | None = None
+        while remaining.strip():
             try:
-                obj = json.loads(line)
+                obj, idx = decoder.raw_decode(remaining.lstrip())
             except json.JSONDecodeError:
-                continue
-            chunks.append(obj.get("response", ""))
+                break
+            chunks.append(str(obj.get("response", "")))
             last_obj = obj
+            remaining = remaining.lstrip()[idx:]
+
         if last_obj is None:
             raise
+        last_obj["response"] = "".join(chunks)
         data = last_obj
-        data["response"] = "".join(chunks)
     sql = data.get("response", "").strip()
     if not _is_valid_sql(sql):
         raise ValueError(f"Generated text is not valid SQL: {sql}")
