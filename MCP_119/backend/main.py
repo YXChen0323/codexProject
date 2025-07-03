@@ -2,12 +2,12 @@ from fastapi import FastAPI, WebSocket
 from pydantic import BaseModel
 import json
 from fastapi.middleware.cors import CORSMiddleware
-from . import jsonrpc
-from .model_router import ModelRouter
-from . import prompt_templates
-from .context_manager import ConversationContext
-from . import sql_generator
-from . import database
+import jsonrpc
+from model_router import ModelRouter
+import prompt_templates
+from context_manager import ConversationContext
+import sql_generator
+import database
 
 app = FastAPI()
 router = ModelRouter()
