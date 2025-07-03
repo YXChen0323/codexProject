@@ -22,3 +22,11 @@ def test_summary():
     summary = ctx.summarize("bob", max_chars=50)
     assert isinstance(summary, str)
     assert len(summary) <= 50
+
+
+def test_reset():
+    ctx = ConversationContext(db_path=":memory:")
+    ctx.record("carol", "hi", "hello")
+    ctx.reset("carol")
+    history = ctx.get_history("carol")
+    assert history == []
