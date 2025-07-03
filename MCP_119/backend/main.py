@@ -53,6 +53,7 @@ class ResetRequest(BaseModel):
 
 class SQLRequest(BaseModel):
     question: str
+    model: str | None = None
 
 
 class SQLExecuteRequest(BaseModel):
@@ -162,8 +163,10 @@ async def get_summary(user_id: str):
 async def generate_sql(request: SQLRequest):
     """Generate an SQL query (including PostGIS syntax) using an LLM."""
     try:
-        sql = sql_generator.generate_sql(request.question)
+        sql = sql_generator.generate_sql(request.question, model=request.model)
     except ValueError as exc:
+        return {"error": str(exc)}
+    except Exception as exc:  # pragma: no cover - depends on environment
         return {"error": str(exc)}
     return {"sql": sql}
 
