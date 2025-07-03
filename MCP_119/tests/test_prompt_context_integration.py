@@ -12,7 +12,7 @@ def test_build_prompt_with_history():
     ctx.record("alice", "hi", "hello")
     ctx.record("alice", "how are you", "fine")
     history = ctx.get_history("alice")
-    prompt = build_prompt_with_history("Qwen2.5-coder-7b", "nlp", "what's up?", history)
+    prompt = build_prompt_with_history("qwen2.5-coder:7b", "nlp", "what's up?", history)
     assert "user: hi" in prompt
     assert "assistant: hello" in prompt
     assert "what's up?" in prompt
