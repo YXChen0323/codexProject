@@ -2,8 +2,10 @@ from fastapi import FastAPI, WebSocket
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from . import jsonrpc
+from .model_router import ModelRouter
 
 app = FastAPI()
+router = ModelRouter()
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,6 +18,11 @@ app.add_middleware(
 
 class QueryRequest(BaseModel):
     query: str
+
+
+class ModelRequest(BaseModel):
+    task_type: str | None = None
+    user_id: str | None = None
 
 @app.get("/hello")
 async def read_root():
@@ -41,3 +48,11 @@ async def handle_query(request: QueryRequest):
         params={"query": request.query},
     )
     return rpc_payload
+
+
+@app.post("/model")
+@app.post("/api/model")
+async def select_model(request: ModelRequest):
+    """Select a model based on user or task information."""
+    model_name = router.route(task_type=request.task_type, user_id=request.user_id)
+    return {"model": model_name}
