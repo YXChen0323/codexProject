@@ -24,7 +24,7 @@ Start the stack:
 docker compose up -d
 ```
 
-Before running the stack for the first time, build the React application so Nginx can serve the static files:
+Before running the stack for the first time, build the React application so Nginx can serve the static files. The UI now uses a modern style defined in `src/App.css`:
 
 ```bash
 (cd frontend/home && npm install && npm run build)
