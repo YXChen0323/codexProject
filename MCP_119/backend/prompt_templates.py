@@ -7,6 +7,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     "phi3:3.8b": {
         "sql": (
             "Given the database schema:\n{schema}\n"
+            "指定emergence(schema )中的 emergency_calls 為欲查詢資料庫\n"
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
@@ -15,6 +16,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         # Used for SQL generation and human friendly responses
         "sql": (
             "Given the database schema:\n{schema}\n"
+            "指定emergence(schema )中的 emergency_calls 為欲查詢資料庫\n"
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
@@ -23,6 +25,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     "sqlcoder:7b": {
         "sql": (
             "Given the database schema:\n{schema}\n"
+            "指定emergence(schema )中的 emergency_calls 為欲查詢資料庫\n"
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
