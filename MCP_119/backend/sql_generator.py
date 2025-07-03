@@ -2,9 +2,10 @@ import json
 import os
 import re
 from urllib import request as urlrequest
-import prompt_templates
-import model_router
+
 import database
+import model_router
+import prompt_templates
 
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
@@ -16,6 +17,18 @@ SQL_START = re.compile(r"^(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|WITH)\b", re.
 def _is_valid_sql(sql: str) -> bool:
     """Return True if the string appears to be a valid SQL statement."""
     return bool(SQL_START.match(sql))
+
+
+CODE_FENCE_RE = re.compile(r"^```(?:sql)?\s*(.*?)\s*```$", re.IGNORECASE | re.DOTALL)
+
+
+def _clean_sql(sql: str) -> str:
+    """Remove markdown code fences from the generated SQL if present."""
+    sql = sql.strip()
+    match = CODE_FENCE_RE.match(sql)
+    if match:
+        sql = match.group(1).strip()
+    return sql
 
 
 def generate_sql(question: str, *, model: str | None = None) -> str:
@@ -59,7 +72,7 @@ def generate_sql(question: str, *, model: str | None = None) -> str:
             raise
         last_obj["response"] = "".join(chunks)
         data = last_obj
-    sql = data.get("response", "").strip()
+    sql = _clean_sql(data.get("response", ""))
     if not _is_valid_sql(sql):
         raise ValueError(f"Generated text is not valid SQL: {sql}")
     return sql

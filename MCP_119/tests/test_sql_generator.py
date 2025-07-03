@@ -57,3 +57,13 @@ def test_generate_sql_streaming(monkeypatch):
     monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
     sql = sql_generator.generate_sql("question")
     assert sql == "SELECT 1;"
+
+
+def test_generate_sql_codeblock(monkeypatch):
+    def fake_urlopen(req):
+        return FakeResponse(json.dumps({"response": "```sql\nSELECT 1;\n```"}).encode())
+
+    monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
+    monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
+    sql = sql_generator.generate_sql("question")
+    assert sql == "SELECT 1;"
