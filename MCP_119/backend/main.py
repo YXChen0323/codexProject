@@ -6,6 +6,7 @@ from .model_router import ModelRouter
 from . import prompt_templates
 from .context_manager import ConversationContext
 from . import sql_generator
+from . import database
 
 app = FastAPI()
 router = ModelRouter()
@@ -43,6 +44,10 @@ class RecordRequest(BaseModel):
 
 class SQLRequest(BaseModel):
     question: str
+
+
+class SQLExecuteRequest(BaseModel):
+    query: str
 
 @app.get("/hello")
 async def read_root():
@@ -117,3 +122,11 @@ async def generate_sql(request: SQLRequest):
     """Generate an SQL query (including PostGIS syntax) using an LLM."""
     sql = sql_generator.generate_sql(request.question)
     return {"sql": sql}
+
+
+@app.post("/sql/execute")
+@app.post("/api/sql/execute")
+async def execute_sql(request: SQLExecuteRequest):
+    """Execute a SQL query and return the results as JSON."""
+    results = database.execute_query(request.query)
+    return {"results": results}
