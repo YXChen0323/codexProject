@@ -5,6 +5,7 @@ from . import jsonrpc
 from .model_router import ModelRouter
 from . import prompt_templates
 from .context_manager import ConversationContext
+from . import sql_generator
 
 app = FastAPI()
 router = ModelRouter()
@@ -38,6 +39,10 @@ class RecordRequest(BaseModel):
     user_id: str
     query: str
     response: str
+
+
+class SQLRequest(BaseModel):
+    question: str
 
 @app.get("/hello")
 async def read_root():
@@ -104,3 +109,11 @@ async def get_summary(user_id: str):
     """Return a summary of the conversation history for a user."""
     summary = context_manager.summarize(user_id)
     return {"summary": summary}
+
+
+@app.post("/sql")
+@app.post("/api/sql")
+async def generate_sql(request: SQLRequest):
+    """Generate an SQL query (including PostGIS syntax) using an LLM."""
+    sql = sql_generator.generate_sql(request.question)
+    return {"sql": sql}
