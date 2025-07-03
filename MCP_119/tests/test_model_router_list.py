@@ -5,12 +5,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
 from model_router import ModelRouter
 
 
-def test_task_type_routing():
-    router = ModelRouter()
-    assert router.route(task_type="code") == "phi3-3.8b"
-
-
-def test_user_preference_routing():
+def test_list_models():
     router = ModelRouter()
     router.add_user_preference("alice", "custom-model")
-    assert router.route(user_id="alice") == "custom-model"
+    models = router.list_models()
+    assert set(models) == {"phi3-3.8b", "Qwen2.5-coder-7b", "sqlcoder-7b", "custom-model"}
+

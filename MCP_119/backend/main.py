@@ -58,6 +58,7 @@ class SQLRequest(BaseModel):
 class SQLExecuteRequest(BaseModel):
     query: str
     user_id: str | None = None
+    model: str | None = None
 
 @app.get("/hello")
 async def read_root():
@@ -91,6 +92,14 @@ async def select_model(request: ModelRequest):
     """Select a model based on user or task information."""
     model_name = router.route(task_type=request.task_type, user_id=request.user_id)
     return {"model": model_name}
+
+
+@app.get("/models")
+@app.get("/api/models")
+async def list_models():
+    """Return the list of available model names."""
+    models = router.list_models()
+    return {"models": models}
 
 
 @app.post("/prompt")
@@ -157,4 +166,4 @@ async def execute_sql(request: SQLExecuteRequest):
     results = database.execute_query(request.query)
     if request.user_id:
         context_manager.record(request.user_id, request.query, json.dumps(results))
-    return jsonrpc.build_response(result={"results": results})
+    return jsonrpc.build_response(result={"results": results, "model": request.model})

@@ -3,11 +3,14 @@ from typing import Dict
 
 # Nested mapping of model name to task to prompt template
 PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
+    # All models now share the same SQL template
     "phi3-3.8b": {
-        "nlp": "Answer the following question: {query}",
+        "sql": "Write an SQL query for: {query}",
     },
     "Qwen2.5-coder-7b": {
-        "code": "Provide code to accomplish the task: {query}",
+        # Used for SQL generation and human friendly responses
+        "sql": "Write an SQL query for: {query}",
+        "nlp": "Answer the following question: {query}",
     },
     "sqlcoder-7b": {
         "sql": "Write an SQL query for: {query}",
