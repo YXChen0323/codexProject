@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
@@ -6,6 +6,26 @@ function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [models, setModels] = useState([]);
+  const [model, setModel] = useState('');
+
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        const resp = await fetch('/api/models');
+        if (resp.ok) {
+          const data = await resp.json();
+          setModels(data.models);
+          if (data.models && data.models.length > 0) {
+            setModel(data.models[0]);
+          }
+        }
+      } catch (err) {
+        // ignore errors
+      }
+    };
+    fetchModels();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +40,7 @@ function App() {
       const response = await fetch('/api/sql/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ query, model })
       });
       if (!response.ok) {
         const data = await response.json().catch(() => null);
@@ -46,6 +66,11 @@ function App() {
     <div className="App">
       <h1>Natural Language Query</h1>
       <form onSubmit={handleSubmit} className="query-form">
+        <select value={model} onChange={(e) => setModel(e.target.value)}>
+          {models.map((m) => (
+            <option key={m} value={m}>{m}</option>
+          ))}
+        </select>
         <input
           type="text"
           value={query}

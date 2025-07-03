@@ -7,8 +7,10 @@ class ModelRouter:
     def __init__(self) -> None:
         # Mapping of task types to model names
         self.task_mapping: Dict[str, str] = {
-            "nlp": "phi3-3.8b",
-            "code": "Qwen2.5-coder-7b",
+            # Qwen2.5-coder-7b handles user facing responses
+            "nlp": "Qwen2.5-coder-7b",
+            # All three models generate SQL queries
+            "code": "phi3-3.8b",
             "sql": "sqlcoder-7b",
         }
         # Optional user specific preferences
@@ -26,3 +28,8 @@ class ModelRouter:
             return self.task_mapping[task_type]
         # Default model if nothing matches
         return self.task_mapping["nlp"]
+
+    def list_models(self) -> list[str]:
+        """Return a list of all known model names."""
+        models = set(self.task_mapping.values()) | set(self.user_mapping.values())
+        return sorted(models)
