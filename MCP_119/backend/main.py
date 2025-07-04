@@ -8,6 +8,7 @@ from model_router import ModelRouter
 import prompt_templates
 from context_manager import ConversationContext
 import sql_generator
+import answer_generator
 import database
 
 app = FastAPI()
@@ -61,6 +62,7 @@ class SQLExecuteRequest(BaseModel):
     query: str
     user_id: str | None = None
     model: str | None = None
+    question: str | None = None
 
 @app.get("/")
 async def root():
@@ -185,11 +187,20 @@ async def execute_sql(request: SQLExecuteRequest):
     if request.user_id:
         context_manager.record(request.user_id, request.query, json.dumps(results))
     summary = summarize_results(results)
+    answer = None
+    if request.question:
+        try:
+            answer = answer_generator.generate_answer(
+                request.question, results, model=request.model or "llama3.2:3b"
+            )
+        except Exception:  # pragma: no cover - depends on environment
+            answer = ""
     return jsonrpc.build_response(result={
         "results": results,
         "model": request.model,
         "sql": request.query,
         "summary": summary,
+        "answer": answer,
     })
 
 
