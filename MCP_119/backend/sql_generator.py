@@ -38,7 +38,14 @@ def generate_sql(question: str, *, model: str | None = None) -> str:
 
     template = prompt_templates.load_template(model, "sql")
     schema = database.describe_schema()
-    prompt = prompt_templates.fill_template(template, question, schema=schema)
+    samples = database.get_random_rows("emergency_calls", limit=3, schema="emergence")
+    sample_text = "\n".join(str(row) for row in samples)
+    prompt = prompt_templates.fill_template(
+        template,
+        question,
+        schema=schema,
+        samples=sample_text,
+    )
 
     req = urlrequest.Request(
         OLLAMA_URL,
