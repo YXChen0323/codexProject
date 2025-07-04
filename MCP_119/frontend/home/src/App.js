@@ -206,8 +206,11 @@ function App() {
           <MapView data={result} />
         )}
 
-        {answer && <div className="text-gray-800">{answer}</div>}
-        {summary && <div className="text-gray-600 italic">{summary}</div>}
+        {answer ? (
+          <div className="text-gray-800">{answer}</div>
+        ) : (
+          summary && <div className="text-gray-600 italic">{summary}</div>
+        )}
       </div>
     </div>
   );
