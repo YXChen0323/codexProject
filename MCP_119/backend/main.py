@@ -191,3 +191,26 @@ async def execute_sql(request: SQLExecuteRequest):
         "sql": request.query,
         "summary": summary,
     })
+
+
+@app.get("/calls")
+@app.get("/api/calls")
+async def get_emergency_calls(limit: int = 100):
+    """Return rows from the emergency_calls table with geometry as WKT."""
+    try:
+        limit = int(limit)
+    except ValueError:
+        limit = 100
+    if limit < 1:
+        limit = 1
+    if limit > 1000:
+        limit = 1000
+    query = (
+        "SELECT *, ST_AsText(geom) AS geom_wkt "
+        "FROM emergence.emergency_calls LIMIT %d" % limit
+    )
+    rows = database.execute_query(query)
+    for row in rows:
+        if "geom_wkt" in row:
+            row["geom"] = row.pop("geom_wkt")
+    return {"rows": rows}
