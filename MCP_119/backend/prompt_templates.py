@@ -3,11 +3,11 @@ from typing import Dict
 
 # Nested mapping of model name to task to prompt template
 PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
-    # All models now share the same SQL template
     "phi3:3.8b": {
         "sql": (
             "Given the database schema:\n{schema}\n"
-            "Designate the emergency_calls table in the emergence schema as the target database table to query.\n"
+            "The table to query is `emergency_calls` in the `emergence` schema.\n"
+            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns}\n"
             "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
@@ -16,10 +16,10 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         ),
     },
     "qwen2.5-coder:7b": {
-        # Used for SQL generation and human friendly responses
         "sql": (
             "Given the database schema:\n{schema}\n"
-            "Designate the emergency_calls table in the emergence schema as the target database table to query.\n"
+            "The table to query is `emergency_calls` in the `emergence` schema.\n"
+            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns}\n"
             "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
@@ -34,7 +34,8 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     "sqlcoder:7b": {
         "sql": (
             "Given the database schema:\n{schema}\n"
-            "Designate the emergency_calls table in the emergence schema as the target database table to query.\n"
+            "The table to query is `emergency_calls` in the `emergence` schema.\n"
+            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns}\n"
             "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
@@ -43,7 +44,6 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         ),
     },
 }
-
 
 
 def load_template(model: str, task: str) -> str:
