@@ -71,3 +71,13 @@ def test_get_random_rows(monkeypatch):
     monkeypatch.setattr(database, "psycopg2", FakePsycopg(rows))
     result = database.get_random_rows("tbl", limit=2, schema="sch")
     assert result == rows
+
+
+def test_get_table_columns(monkeypatch):
+    rows = [
+        {"column_name": "id"},
+        {"column_name": "name"},
+    ]
+    monkeypatch.setattr(database, "psycopg2", FakePsycopg(rows))
+    cols = database.get_table_columns("tbl", schema="sch")
+    assert cols == ["id", "name"]

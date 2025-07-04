@@ -68,3 +68,20 @@ def get_random_rows(table: str, limit: int = 3, *, schema: str | None = None) ->
             return [dict(row) for row in rows]
     finally:
         conn.close()
+
+
+def get_table_columns(table: str, *, schema: str | None = None) -> list[str]:
+    """Return a list of column names for the specified table."""
+    conn = _get_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            schema_clause = f"table_schema = '{schema}'" if schema else "table_schema = 'public'"
+            query = (
+                "SELECT column_name FROM information_schema.columns "
+                f"WHERE {schema_clause} AND table_name = '{table}' ORDER BY ordinal_position"
+            )
+            cur.execute(query)
+            rows = cur.fetchall()
+            return [row["column_name"] for row in rows]
+    finally:
+        conn.close()
