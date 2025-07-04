@@ -9,7 +9,6 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
-            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
@@ -21,7 +20,6 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
-            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
@@ -37,7 +35,6 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
-            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
@@ -53,7 +50,6 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
-            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
@@ -65,7 +61,6 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
-            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
@@ -76,6 +71,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         ),
     },
 }
+
 
 
 def load_template(model: str, task: str) -> str:
