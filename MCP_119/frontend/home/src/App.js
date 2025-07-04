@@ -13,6 +13,23 @@ function App() {
   const [models, setModels] = useState([]);
   const [model, setModel] = useState('');
 
+  const loadCalls = async () => {
+    setLoading(true);
+    setError(null);
+    setSql('');
+    setSummary('');
+    try {
+      const resp = await fetch('/api/calls');
+      if (!resp.ok) throw new Error('Failed to fetch data');
+      const data = await resp.json();
+      setResult(data.rows || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchModels = async () => {
       try {
@@ -125,6 +142,14 @@ function App() {
             {loading ? <Loader /> : '查詢'}
           </button>
         </form>
+
+        <button
+          onClick={loadCalls}
+          disabled={loading}
+          className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition"
+        >
+          {loading ? <Loader /> : '載入示範資料'}
+        </button>
 
         {sql && (
           <div className="space-y-2">
