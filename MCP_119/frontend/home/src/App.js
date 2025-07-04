@@ -8,6 +8,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [sql, setSql] = useState('');
   const [summary, setSummary] = useState('');
+  const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [models, setModels] = useState([]);
@@ -18,6 +19,7 @@ function App() {
     setError(null);
     setSql('');
     setSummary('');
+    setAnswer('');
     try {
       const resp = await fetch('/api/calls');
       if (!resp.ok) throw new Error('Failed to fetch data');
@@ -46,11 +48,11 @@ function App() {
     fetchModels();
   }, []);
 
-  const executeSql = async (querySql) => {
+  const executeSql = async (querySql, questionParam = query) => {
     const response = await fetch('/api/sql/execute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: querySql, model })
+      body: JSON.stringify({ query: querySql, model, question: questionParam })
     });
     if (!response.ok) {
       const data = await response.json().catch(() => null);
@@ -65,6 +67,7 @@ function App() {
     }
     setResult(data.result?.results || data.results || []);
     setSummary(data.result?.summary || data.summary || '');
+    setAnswer(data.result?.answer || data.answer || '');
     setSql(data.result?.sql || querySql);
   };
 
@@ -79,6 +82,7 @@ function App() {
     setResult(null);
     setSql('');
     setSummary('');
+    setAnswer('');
     try {
       const sqlResp = await fetch('/api/sql', {
         method: 'POST',
@@ -89,7 +93,7 @@ function App() {
       const sqlData = await sqlResp.json();
       if (sqlData.error) throw new Error(sqlData.error);
       setSql(sqlData.sql);
-      await executeSql(sqlData.sql);
+      await executeSql(sqlData.sql, query);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -103,8 +107,9 @@ function App() {
     setError(null);
     setResult(null);
     setSummary('');
+    setAnswer('');
     try {
-      await executeSql(sql);
+      await executeSql(sql, query);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -201,6 +206,7 @@ function App() {
           <MapView data={result} />
         )}
 
+        {answer && <div className="text-gray-800">{answer}</div>}
         {summary && <div className="text-gray-600 italic">{summary}</div>}
       </div>
     </div>
