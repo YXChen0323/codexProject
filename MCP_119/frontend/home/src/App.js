@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Loader from './Loader';
+import MapView from './MapView';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -169,6 +170,10 @@ function App() {
               </tbody>
             </table>
           </div>
+        )}
+
+        {Array.isArray(result) && result.length > 0 && (
+          <MapView data={result} />
         )}
 
         {summary && <div className="text-gray-600 italic">{summary}</div>}
