@@ -20,7 +20,10 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
-        "nlp": "Answer the following question: {query}",
+        "nlp": (
+            "Given the SQL query results:\n{results}\n"
+            "Answer the question: {query} in a friendly and helpful way."
+        ),
     },
     "sqlcoder:7b": {
         "sql": (
@@ -43,10 +46,12 @@ def fill_template(template: str, query: str, **extra: str) -> str:
     return template.format(query=query, **extra)
 
 
-def build_prompt_with_history(model: str, task: str, query: str, history: list) -> str:
-    """Return a prompt that includes conversation history followed by the user's query."""
+def build_prompt_with_history(
+    model: str, task: str, query: str, history: list, results: str | None = None
+) -> str:
+    """Return a prompt that includes conversation history and optional query results."""
     template = load_template(model, task)
-    base_prompt = fill_template(template, query)
+    base_prompt = fill_template(template, query, results=results or "")
     if not history:
         return base_prompt
     history_text = "\n".join(f"{m.role}: {m.content}" for m in history)
