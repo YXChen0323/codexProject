@@ -23,9 +23,7 @@ function App() {
             setModel(data.models[0]);
           }
         }
-      } catch (err) {
-        // ignore errors
-      }
+      } catch (_) {}
     };
     fetchModels();
   }, []);
@@ -69,13 +67,9 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: query, model })
       });
-      if (!sqlResp.ok) {
-        throw new Error('Failed to generate SQL');
-      }
+      if (!sqlResp.ok) throw new Error('Failed to generate SQL');
       const sqlData = await sqlResp.json();
-      if (sqlData.error) {
-        throw new Error(sqlData.error);
-      }
+      if (sqlData.error) throw new Error(sqlData.error);
       setSql(sqlData.sql);
       await executeSql(sqlData.sql);
     } catch (err) {
@@ -101,11 +95,16 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Natural Language Query</h1>
-      <div className="section">
-        <form onSubmit={handleSubmit} className="query-form">
-          <select value={model} onChange={(e) => setModel(e.target.value)}>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-6">
+        <h1 className="text-2xl font-bold text-center text-blue-600">自然語言 SQL 查詢系統</h1>
+
+        <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
+          <select
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            className="border rounded p-2 flex-1"
+          >
             {models.map((m) => (
               <option key={m} value={m}>{m}</option>
             ))}
@@ -114,47 +113,65 @@ function App() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Enter your question"
+            placeholder="輸入你的問題"
+            className="border rounded p-2 flex-1"
           />
-          <button type="submit" disabled={loading}>
-            {loading ? <Loader /> : 'Submit'}
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          >
+            {loading ? <Loader /> : '查詢'}
           </button>
         </form>
-      </div>
-      {sql && (
-        <div className="section sql-editor">
-          <textarea value={sql} onChange={(e) => setSql(e.target.value)} />
-          <button type="button" onClick={handleSqlExecute} disabled={loading}>
-            {loading ? <Loader /> : 'Run SQL'}
-          </button>
-        </div>
-      )}
-      <div className="section query-result">
+
+        {sql && (
+          <div className="space-y-2">
+            <textarea
+              value={sql}
+              onChange={(e) => setSql(e.target.value)}
+              className="w-full border rounded p-2 h-40 font-mono"
+            />
+            <button
+              onClick={handleSqlExecute}
+              disabled={loading}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+            >
+              {loading ? <Loader /> : '執行 SQL'}
+            </button>
+          </div>
+        )}
+
+        {error && <div className="bg-red-100 text-red-700 p-3 rounded">{error}</div>}
+
         {loading && <Loader />}
-        {error && <p className="error">{error}</p>}
-        {Array.isArray(result) ? (
-          <table className="result-table">
-            <thead>
-              <tr>
-                {Object.keys(result[0] || {}).map((key) => (
-                  <th key={key}>{key}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {result.map((row, idx) => (
-                <tr key={idx}>
-                  {Object.values(row).map((val, i) => (
-                    <td key={i}>{String(val)}</td>
+
+        {Array.isArray(result) && result.length > 0 && (
+          <div className="overflow-x-auto">
+            <table className="min-w-full border text-sm">
+              <thead className="bg-gray-100">
+                <tr>
+                  {Object.keys(result[0]).map((key) => (
+                    <th key={key} className="border px-2 py-1 text-left font-semibold">
+                      {key}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          result && <pre>{JSON.stringify(result, null, 2)}</pre>
+              </thead>
+              <tbody>
+                {result.map((row, idx) => (
+                  <tr key={idx} className="even:bg-gray-50 hover:bg-gray-100">
+                    {Object.values(row).map((val, i) => (
+                      <td key={i} className="border px-2 py-1">{String(val)}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
-        {summary && <p className="summary">{summary}</p>}
+
+        {summary && <div className="text-gray-600 italic">{summary}</div>}
       </div>
     </div>
   );
