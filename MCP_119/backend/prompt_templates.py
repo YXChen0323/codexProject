@@ -8,11 +8,11 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns}\n"
-            "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for: {query}\n"
-            "Respond only with a valid SQL statement and filter out any non-SQL text."
+            "Write an SQL query for the following natural language question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
     },
     "qwen2.5-coder:7b": {
@@ -20,11 +20,11 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns}\n"
-            "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for: {query}\n"
-            "Respond only with a valid SQL statement and filter out any non-SQL text."
+            "Write an SQL query for the following natural language question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
@@ -36,11 +36,11 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns}\n"
-            "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for: {query}\n"
-            "Respond only with a valid SQL statement and filter out any non-SQL text."
+            "Write an SQL query for the following natural language question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
@@ -52,11 +52,11 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns}\n"
-            "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for: {query}\n"
-            "Respond only with a valid SQL statement and filter out any non-SQL text."
+            "Write an SQL query for the following natural language question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
     },
     "llama3.2:3b": {
@@ -64,11 +64,11 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns}\n"
-            "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Always enclose column names with double quotes, like \"Call Date\", and do not rename, reformat, translate, or modify them in any way.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for: {query}\n"
-            "Respond only with a valid SQL statement and filter out any non-SQL text."
+            "Write an SQL query for the following natural language question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
