@@ -31,6 +31,22 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Answer the question: {query} in a friendly and helpful way."
         ),
     },
+    "qwen2.5-coder:3b": {
+        "sql": (
+            "Given the database schema:\n{schema}\n"
+            "The table to query is `emergency_calls` in the `emergence` schema.\n"
+            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
+            "Table columns include: {columns}\n"
+            "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
+            "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "Write an SQL query for: {query}\n"
+            "Respond only with a valid SQL statement and filter out any non-SQL text."
+        ),
+        "nlp": (
+            "Given the SQL query results:\n{results}\n"
+            "Answer the question: {query} in a friendly and helpful way."
+        ),
+    },
     "sqlcoder:7b": {
         "sql": (
             "Given the database schema:\n{schema}\n"

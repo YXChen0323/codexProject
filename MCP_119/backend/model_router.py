@@ -9,6 +9,8 @@ class ModelRouter:
         self.task_mapping: Dict[str, str] = {
             # qwen2.5-coder:7b handles user facing responses
             "nlp": "qwen2.5-coder:7b",
+            # qwen2.5-coder:3b is a lightweight variant for simple NLP tasks
+            "nlp-small": "qwen2.5-coder:3b",
             # All three models generate SQL queries
             "code": "phi3:3.8b",
             "sql": "sqlcoder:7b",
