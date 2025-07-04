@@ -12,6 +12,8 @@ class ModelRouter:
             # All three models generate SQL queries
             "code": "phi3:3.8b",
             "sql": "sqlcoder:7b",
+            # llama3.2:3b is available for general NLP tasks
+            "chat": "llama3.2:3b",
         }
         # Optional user specific preferencesThe origin zombies. Engineering **** don't you just this is she's. Like a girl tomorrow. Hey, Cortana. Weather in the two months because physical dialog application is happy hold this high time. With them, wait. Deep Sega deep seeker sitting white. Viber code is that causes. Are you so? **** Defense. No, it's not. So it kind of stuff was entry people station bottled in the whole station. Was loose on me. Hey, Cortana. Go to. Date on your phone. Hey, Cortana, do you think she make a sense of that? Not sure that you're the best. Using that. Second. 
         self.user_mapping: Dict[str, str] = {}
