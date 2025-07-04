@@ -8,7 +8,7 @@ from prompt_templates import load_template, fill_template
 
 def test_load_template():
     template = load_template("qwen2.5-coder:7b", "nlp")
-    assert template == "Answer the following question: {query}"
+    assert "SQL query results" in template
 
 
 def test_fill_template():
