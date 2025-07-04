@@ -40,11 +40,14 @@ def generate_sql(question: str, *, model: str | None = None) -> str:
     schema = database.describe_schema()
     samples = database.get_random_rows("emergency_calls", limit=3, schema="emergence")
     sample_text = "\n".join(str(row) for row in samples)
+    columns = database.get_table_columns("emergency_calls", schema="emergence")
+    columns_text = ", ".join(columns)
     prompt = prompt_templates.fill_template(
         template,
         question,
         schema=schema,
         samples=sample_text,
+        columns=columns_text,
     )
 
     req = urlrequest.Request(

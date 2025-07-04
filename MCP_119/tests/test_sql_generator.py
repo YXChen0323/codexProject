@@ -31,6 +31,7 @@ def test_generate_sql(monkeypatch):
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
     monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
     monkeypatch.setattr(database, "get_random_rows", lambda *a, **k: [{"id": 1}])
+    monkeypatch.setattr(database, "get_table_columns", lambda *a, **k: ["id"]) 
     sql = sql_generator.generate_sql("test question")
     assert sql == "SELECT 1;"
 
@@ -42,6 +43,7 @@ def test_generate_sql_invalid(monkeypatch):
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
     monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
     monkeypatch.setattr(database, "get_random_rows", lambda *a, **k: [{"id": 1}])
+    monkeypatch.setattr(database, "get_table_columns", lambda *a, **k: ["id"]) 
     with pytest.raises(ValueError):
         sql_generator.generate_sql("bad question")
 
@@ -58,6 +60,7 @@ def test_generate_sql_streaming(monkeypatch):
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
     monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
     monkeypatch.setattr(database, "get_random_rows", lambda *a, **k: [{"id": 1}])
+    monkeypatch.setattr(database, "get_table_columns", lambda *a, **k: ["id"]) 
     sql = sql_generator.generate_sql("question")
     assert sql == "SELECT 1;"
 
@@ -69,5 +72,6 @@ def test_generate_sql_codeblock(monkeypatch):
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
     monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
     monkeypatch.setattr(database, "get_random_rows", lambda *a, **k: [{"id": 1}])
+    monkeypatch.setattr(database, "get_table_columns", lambda *a, **k: ["id"]) 
     sql = sql_generator.generate_sql("question")
     assert sql == "SELECT 1;"
