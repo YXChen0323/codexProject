@@ -8,6 +8,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": (
             "Given the database schema:\n{schema}\n"
             "指定emergence(schema )中的 emergency_calls 為欲查詢資料庫\n"
+            "表格欄位包含: {columns}\n"
             "以下是隨機抽出的3筆資料供參考:\n{samples}\n"
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
@@ -18,6 +19,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": (
             "Given the database schema:\n{schema}\n"
             "指定emergence(schema )中的 emergency_calls 為欲查詢資料庫\n"
+            "表格欄位包含: {columns}\n"
             "以下是隨機抽出的3筆資料供參考:\n{samples}\n"
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
@@ -31,6 +33,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": (
             "Given the database schema:\n{schema}\n"
             "指定emergence(schema )中的 emergency_calls 為欲查詢資料庫\n"
+            "表格欄位包含: {columns}\n"
             "以下是隨機抽出的3筆資料供參考:\n{samples}\n"
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
