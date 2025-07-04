@@ -64,3 +64,10 @@ def test_describe_schema(monkeypatch):
     schema = database.describe_schema()
     assert "users(id, name)" in schema
     assert "orders(id, amount)" in schema
+
+
+def test_get_random_rows(monkeypatch):
+    rows = [{"id": 1}, {"id": 2}, {"id": 3}]
+    monkeypatch.setattr(database, "psycopg2", FakePsycopg(rows))
+    result = database.get_random_rows("tbl", limit=2, schema="sch")
+    assert result == rows
