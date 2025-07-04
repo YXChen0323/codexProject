@@ -7,10 +7,10 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     "phi3:3.8b": {
         "sql": (
             "Given the database schema:\n{schema}\n"
-            "指定emergence(schema )中的 emergency_calls 為欲查詢資料庫\n"
-            "表格欄位包含: {columns}\n"
-            "一定要依據欄位(保持不變)以及提問產生SQL\n"
-            "以下是隨機抽出的3筆資料供參考:\n{samples}\n"
+            "Designate the emergency_calls table in the emergence schema as the target database table to query.\n"
+            "Table columns include: {columns}\n"
+            "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
+            "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
@@ -19,10 +19,10 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         # Used for SQL generation and human friendly responses
         "sql": (
             "Given the database schema:\n{schema}\n"
-            "指定emergence(schema )中的 emergency_calls 為欲查詢資料庫\n"
-            "表格欄位包含: {columns}\n"
-            "一定要依據欄位(保持不變)以及提問產生SQL\n"
-            "以下是隨機抽出的3筆資料供參考:\n{samples}\n"
+            "Designate the emergency_calls table in the emergence schema as the target database table to query.\n"
+            "Table columns include: {columns}\n"
+            "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
+            "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
@@ -34,15 +34,16 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     "sqlcoder:7b": {
         "sql": (
             "Given the database schema:\n{schema}\n"
-            "指定emergence(schema )中的 emergency_calls 為欲查詢資料庫\n"
-            "表格欄位包含: {columns}\n"
-            "一定要依據欄位(保持不變)以及提問產生SQL\n"
-            "以下是隨機抽出的3筆資料供參考:\n{samples}\n"
+            "Designate the emergency_calls table in the emergence schema as the target database table to query.\n"
+            "Table columns include: {columns}\n"
+            "You must generate the SQL based strictly on the provided columns (do not modify them) and the question.\n"
+            "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "Write an SQL query for: {query}\n"
             "Respond only with a valid SQL statement and filter out any non-SQL text."
         ),
     },
 }
+
 
 
 def load_template(model: str, task: str) -> str:
