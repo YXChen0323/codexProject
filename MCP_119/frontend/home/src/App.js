@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Loader from './Loader';
 import MapView from './MapView';
+import HistorySidebar from './HistorySidebar';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -145,7 +146,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-6">
+      <div className="flex flex-col md:flex-row max-w-6xl mx-auto">
+        <div className="flex-1 bg-white shadow-md rounded-lg p-6 space-y-6">
         <h1 className="text-2xl font-bold text-center text-blue-600">自然語言 SQL 查詢系統</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
@@ -238,33 +240,8 @@ function App() {
           summary && <div className="text-gray-600 italic">{summary}</div>
         )}
 
-        {history.length > 0 && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">歷史紀錄</h2>
-              <button
-                onClick={clearHistory}
-                className="text-sm text-blue-600 hover:underline"
-              >
-                清除紀錄
-              </button>
-            </div>
-            <ul className="list-disc pl-5 space-y-2">
-              {history.map((item, idx) => (
-                <li key={idx}>
-                  <div className="font-semibold">{item.question}</div>
-                  {item.answer ? (
-                    <div>{item.answer}</div>
-                  ) : item.summary ? (
-                    <div className="text-gray-600 italic">{item.summary}</div>
-                  ) : Array.isArray(item.result) ? (
-                    <div className="text-gray-600 italic">共 {item.result.length} 筆資料</div>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        </div>
+        <HistorySidebar history={history} clearHistory={clearHistory} />
       </div>
     </div>
   );
