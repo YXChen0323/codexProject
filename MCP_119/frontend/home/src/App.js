@@ -26,10 +26,10 @@ function App() {
     localStorage.setItem('history', JSON.stringify(history));
   }, [history]);
 
-  const addHistory = (question, summaryText, answerText) => {
+  const addHistory = (question, summaryText, answerText, sqlText, resultData, modelName) => {
     setHistory((prev) => [
       ...prev,
-      { question, summary: summaryText, answer: answerText },
+      { question, summary: summaryText, answer: answerText, sql: sqlText, result: resultData, model: modelName },
     ]);
   };
 
@@ -89,13 +89,17 @@ function App() {
     if (data.error) {
       throw new Error(data.error.message || 'Server error');
     }
-    setResult(data.result?.results || data.results || []);
-    setSummary(data.result?.summary || data.summary || '');
-    setAnswer(data.result?.answer || data.answer || '');
-    setSql(data.result?.sql || querySql);
+    const results = data.result?.results || data.results || [];
     const summaryText = data.result?.summary || data.summary || '';
     const answerText = data.result?.answer || data.answer || '';
-    addHistory(questionParam, summaryText, answerText);
+    const sqlText = data.result?.sql || querySql;
+
+    setResult(results);
+    setSummary(summaryText);
+    setAnswer(answerText);
+    setSql(sqlText);
+
+    addHistory(questionParam, summaryText, answerText, sqlText, results, model);
   };
 
   const handleSubmit = async (e) => {
@@ -141,6 +145,17 @@ function App() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const openHistory = (item) => {
+    setQuery(item.question || '');
+    setSql(item.sql || '');
+    setResult(item.result || null);
+    setSummary(item.summary || '');
+    setAnswer(item.answer || '');
+    if (item.model) {
+      setModel(item.model);
     }
   };
 
@@ -241,7 +256,7 @@ function App() {
         )}
 
         </div>
-        <HistorySidebar history={history} clearHistory={clearHistory} />
+        <HistorySidebar history={history} clearHistory={clearHistory} openHistory={openHistory} />
       </div>
     </div>
   );
