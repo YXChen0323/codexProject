@@ -10,6 +10,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
@@ -21,6 +22,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
@@ -36,6 +38,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
@@ -51,6 +54,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
@@ -62,6 +66,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
