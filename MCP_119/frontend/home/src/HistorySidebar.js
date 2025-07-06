@@ -1,6 +1,6 @@
 import React from 'react';
 
-function HistorySidebar({ history, clearHistory }) {
+function HistorySidebar({ history, clearHistory, openHistory }) {
   if (!history || history.length === 0) return null;
   return (
     <div className="w-64 bg-white shadow-md rounded-lg p-4 space-y-2 md:ml-4 h-fit">
@@ -15,7 +15,7 @@ function HistorySidebar({ history, clearHistory }) {
       </div>
       <ul className="list-disc pl-5 space-y-2">
         {history.map((item, idx) => (
-          <li key={idx}>
+          <li key={idx} className="cursor-pointer" onClick={() => openHistory(item)}>
             <div className="font-semibold">{item.question}</div>
             {item.answer ? (
               <div>{item.answer}</div>
