@@ -10,7 +10,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
+            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
@@ -22,13 +22,13 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
+            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
-            "Answer the question: {query} in a friendly and helpful way."
+            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
         ),
     },
     "qwen2.5-coder:3b": {
@@ -38,13 +38,13 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
+            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
-            "Answer the question: {query} in a friendly and helpful way."
+            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
         ),
     },
     "sqlcoder:7b": {
@@ -54,7 +54,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
+            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
@@ -66,13 +66,13 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Always use `FROM emergence.emergency_calls` in the SQL.\n"
             "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may include additional details related to these columns even if the user does not explicitly mention them.\n"
+            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
-            "Answer the question: {query} in a friendly and helpful way."
+            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
         ),
     },
 }
