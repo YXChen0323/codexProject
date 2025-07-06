@@ -25,8 +25,16 @@ function App() {
     localStorage.setItem('history', JSON.stringify(history));
   }, [history]);
 
-  const addHistory = (question, resultData) => {
-    setHistory((prev) => [...prev, { question, result: resultData }]);
+  const addHistory = (question, summaryText, answerText) => {
+    setHistory((prev) => [
+      ...prev,
+      { question, summary: summaryText, answer: answerText },
+    ]);
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem('history');
   };
 
   const loadCalls = async () => {
@@ -84,7 +92,9 @@ function App() {
     setSummary(data.result?.summary || data.summary || '');
     setAnswer(data.result?.answer || data.answer || '');
     setSql(data.result?.sql || querySql);
-    addHistory(questionParam, data.result?.results || data.results || []);
+    const summaryText = data.result?.summary || data.summary || '';
+    const answerText = data.result?.answer || data.answer || '';
+    addHistory(questionParam, summaryText, answerText);
   };
 
   const handleSubmit = async (e) => {
@@ -230,14 +240,26 @@ function App() {
 
         {history.length > 0 && (
           <div className="space-y-2">
-            <h2 className="text-lg font-semibold">歷史紀錄</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">歷史紀錄</h2>
+              <button
+                onClick={clearHistory}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                清除紀錄
+              </button>
+            </div>
             <ul className="list-disc pl-5 space-y-2">
               {history.map((item, idx) => (
                 <li key={idx}>
                   <div className="font-semibold">{item.question}</div>
-                  <pre className="whitespace-pre-wrap break-all bg-gray-100 p-2 rounded">
-                    {JSON.stringify(item.result, null, 2)}
-                  </pre>
+                  {item.answer ? (
+                    <div>{item.answer}</div>
+                  ) : item.summary ? (
+                    <div className="text-gray-600 italic">{item.summary}</div>
+                  ) : Array.isArray(item.result) ? (
+                    <div className="text-gray-600 italic">共 {item.result.length} 筆資料</div>
+                  ) : null}
                 </li>
               ))}
             </ul>
