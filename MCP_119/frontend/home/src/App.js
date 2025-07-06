@@ -13,6 +13,21 @@ function App() {
   const [error, setError] = useState(null);
   const [models, setModels] = useState([]);
   const [model, setModel] = useState('');
+  const [history, setHistory] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('history')) || [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('history', JSON.stringify(history));
+  }, [history]);
+
+  const addHistory = (question, resultData) => {
+    setHistory((prev) => [...prev, { question, result: resultData }]);
+  };
 
   const loadCalls = async () => {
     setLoading(true);
@@ -69,6 +84,7 @@ function App() {
     setSummary(data.result?.summary || data.summary || '');
     setAnswer(data.result?.answer || data.answer || '');
     setSql(data.result?.sql || querySql);
+    addHistory(questionParam, data.result?.results || data.results || []);
   };
 
   const handleSubmit = async (e) => {
@@ -210,6 +226,22 @@ function App() {
           <div className="text-gray-800">{answer}</div>
         ) : (
           summary && <div className="text-gray-600 italic">{summary}</div>
+        )}
+
+        {history.length > 0 && (
+          <div className="space-y-2">
+            <h2 className="text-lg font-semibold">歷史紀錄</h2>
+            <ul className="list-disc pl-5 space-y-2">
+              {history.map((item, idx) => (
+                <li key={idx}>
+                  <div className="font-semibold">{item.question}</div>
+                  <pre className="whitespace-pre-wrap break-all bg-gray-100 p-2 rounded">
+                    {JSON.stringify(item.result, null, 2)}
+                  </pre>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </div>
