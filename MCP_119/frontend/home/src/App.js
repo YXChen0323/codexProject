@@ -14,6 +14,7 @@ function App() {
   const [error, setError] = useState(null);
   const [models, setModels] = useState([]);
   const [model, setModel] = useState('');
+  const [roads, setRoads] = useState(null);
   const [history, setHistory] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('history')) || [];
@@ -44,11 +45,31 @@ function App() {
     setSql('');
     setSummary('');
     setAnswer('');
+    setRoads(null);
     try {
       const resp = await fetch('/api/calls');
       if (!resp.ok) throw new Error('Failed to fetch data');
       const data = await resp.json();
       setResult(data.rows || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadRoads = async () => {
+    setLoading(true);
+    setError(null);
+    setSql('');
+    setSummary('');
+    setAnswer('');
+    setResult(null);
+    try {
+      const resp = await fetch('/api/roads');
+      if (!resp.ok) throw new Error('Failed to fetch data');
+      const data = await resp.json();
+      setRoads(data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -114,6 +135,7 @@ function App() {
     setSql('');
     setSummary('');
     setAnswer('');
+    setRoads(null);
     try {
       const sqlResp = await fetch('/api/sql', {
         method: 'POST',
@@ -139,6 +161,7 @@ function App() {
     setResult(null);
     setSummary('');
     setAnswer('');
+    setRoads(null);
     try {
       await executeSql(sql, query);
     } catch (err) {
@@ -154,6 +177,7 @@ function App() {
     setResult(item.result || null);
     setSummary(item.summary || '');
     setAnswer(item.answer || '');
+    setRoads(null);
     if (item.model) {
       setModel(item.model);
     }
@@ -197,6 +221,14 @@ function App() {
           className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition"
         >
           {loading ? <Loader /> : '載入示範資料'}
+        </button>
+
+        <button
+          onClick={loadRoads}
+          disabled={loading}
+          className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition"
+        >
+          {loading ? <Loader /> : '載入道路資料'}
         </button>
 
         {sql && (
@@ -245,9 +277,9 @@ function App() {
           </div>
         )}
 
-        {Array.isArray(result) && result.length > 0 && (
-          <MapView data={result} />
-        )}
+        {(Array.isArray(result) && result.length > 0) || roads ? (
+          <MapView data={result || []} geojson={roads} />
+        ) : null}
 
         {answer ? (
           <div className="text-gray-800">{answer}</div>
