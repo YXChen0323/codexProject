@@ -28,9 +28,10 @@ function getLatLng(row) {
 }
 
 function MapView({ data = [], geojson }) {
-  const markers = Array.isArray(data)
-    ? data.map((row) => ({ row, latlng: getLatLng(row) })).filter((m) => m.latlng)
-    : [];
+  const markers =
+    !geojson && Array.isArray(data)
+      ? data.map((row) => ({ row, latlng: getLatLng(row) })).filter((m) => m.latlng)
+      : [];
   let center = null;
   if (geojson && geojson.features && geojson.features.length > 0) {
     const first = geojson.features[0];
