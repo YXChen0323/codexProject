@@ -30,6 +30,8 @@ Before running the stack for the first time, build the React application so Ngin
 (cd frontend/home && npm install && npm run build)
 ```
 
+The frontend also visualizes query results using a simple bar chart when numeric data is available.
+
 Stop the stack:
 
 ```bash
