@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket
 from pydantic import BaseModel
-from utils import summarize_results
+from utils import summarize_results, results_to_geojson
 import json
 from fastapi.middleware.cors import CORSMiddleware
 import jsonrpc
@@ -187,6 +187,7 @@ async def execute_sql(request: SQLExecuteRequest):
     if request.user_id:
         context_manager.record(request.user_id, request.query, json.dumps(results))
     summary = summarize_results(results)
+    geojson = results_to_geojson(results)
     answer = None
     if request.question:
         try:
@@ -201,36 +202,5 @@ async def execute_sql(request: SQLExecuteRequest):
         "sql": request.query,
         "summary": summary,
         "answer": answer,
+        "geojson": geojson,
     })
-
-
-@app.get("/roads")
-@app.get("/api/roads")
-async def get_roads(limit: int = 100):
-    """Return road geometries from the tiger schema as GeoJSON."""
-    try:
-        limit = int(limit)
-    except ValueError:
-        limit = 100
-    if limit < 1:
-        limit = 1
-    if limit > 1000:
-        limit = 1000
-    query = (
-        "SELECT gid, fullname, ST_AsGeoJSON(geom) AS geom_json "
-        "FROM tiger.roads LIMIT %d" % limit
-    )
-    rows = database.execute_query(query)
-    features = []
-    for row in rows:
-        geom_json = row.pop("geom_json", None)
-        if geom_json:
-            geometry = json.loads(geom_json)
-        else:
-            geometry = None
-        features.append({
-            "type": "Feature",
-            "geometry": geometry,
-            "properties": row,
-        })
-    return {"type": "FeatureCollection", "features": features}

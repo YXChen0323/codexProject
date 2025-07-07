@@ -14,7 +14,7 @@ function App() {
   const [error, setError] = useState(null);
   const [models, setModels] = useState([]);
   const [model, setModel] = useState('');
-  const [roads, setRoads] = useState(null);
+  const [geojson, setGeojson] = useState(null);
   const [history, setHistory] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('history')) || [];
@@ -40,24 +40,6 @@ function App() {
   };
 
 
-  const loadRoads = async () => {
-    setLoading(true);
-    setError(null);
-    setSql('');
-    setSummary('');
-    setAnswer('');
-    setResult(null);
-    try {
-      const resp = await fetch('/api/roads');
-      if (!resp.ok) throw new Error('Failed to fetch data');
-      const data = await resp.json();
-      setRoads(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     const fetchModels = async () => {
@@ -96,11 +78,13 @@ function App() {
     const summaryText = data.result?.summary || data.summary || '';
     const answerText = data.result?.answer || data.answer || '';
     const sqlText = data.result?.sql || querySql;
+    const geo = data.result?.geojson || data.geojson || null;
 
     setResult(results);
     setSummary(summaryText);
     setAnswer(answerText);
     setSql(sqlText);
+    setGeojson(geo);
 
     addHistory(questionParam, summaryText, answerText, sqlText, results, model);
   };
@@ -117,7 +101,7 @@ function App() {
     setSql('');
     setSummary('');
     setAnswer('');
-    setRoads(null);
+    setGeojson(null);
     try {
       const sqlResp = await fetch('/api/sql', {
         method: 'POST',
@@ -143,7 +127,7 @@ function App() {
     setResult(null);
     setSummary('');
     setAnswer('');
-    setRoads(null);
+    setGeojson(null);
     try {
       await executeSql(sql, query);
     } catch (err) {
@@ -159,7 +143,7 @@ function App() {
     setResult(item.result || null);
     setSummary(item.summary || '');
     setAnswer(item.answer || '');
-    setRoads(null);
+    setGeojson(null);
     if (item.model) {
       setModel(item.model);
     }
@@ -197,13 +181,6 @@ function App() {
           </button>
         </form>
 
-        <button
-          onClick={loadRoads}
-          disabled={loading}
-          className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition"
-        >
-          {loading ? <Loader /> : '載入道路資料'}
-        </button>
 
         {sql && (
           <div className="space-y-2">
@@ -251,8 +228,8 @@ function App() {
           </div>
         )}
 
-        {(Array.isArray(result) && result.length > 0) || roads ? (
-          <MapView data={result || []} geojson={roads} />
+        {(Array.isArray(result) && result.length > 0) || geojson ? (
+          <MapView data={result || []} geojson={geojson} />
         ) : null}
 
         {answer ? (
