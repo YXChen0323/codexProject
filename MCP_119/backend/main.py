@@ -225,3 +225,35 @@ async def get_emergency_calls(limit: int = 100):
         if "geom_wkt" in row:
             row["geom"] = row.pop("geom_wkt")
     return {"rows": rows}
+
+
+@app.get("/roads")
+@app.get("/api/roads")
+async def get_roads(limit: int = 100):
+    """Return road geometries from the tiger schema as GeoJSON."""
+    try:
+        limit = int(limit)
+    except ValueError:
+        limit = 100
+    if limit < 1:
+        limit = 1
+    if limit > 1000:
+        limit = 1000
+    query = (
+        "SELECT gid, fullname, ST_AsGeoJSON(geom) AS geom_json "
+        "FROM tiger.roads LIMIT %d" % limit
+    )
+    rows = database.execute_query(query)
+    features = []
+    for row in rows:
+        geom_json = row.pop("geom_json", None)
+        if geom_json:
+            geometry = json.loads(geom_json)
+        else:
+            geometry = None
+        features.append({
+            "type": "Feature",
+            "geometry": geometry,
+            "properties": row,
+        })
+    return {"type": "FeatureCollection", "features": features}
