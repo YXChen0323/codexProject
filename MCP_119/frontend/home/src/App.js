@@ -3,6 +3,7 @@ import './App.css';
 import Loader from './Loader';
 import MapView from './MapView';
 import HistorySidebar from './HistorySidebar';
+import ResultChart from './ResultChart';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -225,6 +226,7 @@ function App() {
                 ))}
               </tbody>
             </table>
+            <ResultChart data={result} />
           </div>
         )}
 
