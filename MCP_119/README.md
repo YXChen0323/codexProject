@@ -39,6 +39,8 @@ stations) while the main answer and table remain based on the original
 question.
 The additional SQL used to fetch data for the chart is now shown below the
 main query results so you can inspect or reuse it if needed.
+You can also generate this follow-up query directly using the
+`generate_chart_sql()` helper in `backend/sql_generator.py`.
 
 Stop the stack:
 
