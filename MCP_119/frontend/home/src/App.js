@@ -15,6 +15,7 @@ function App() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
   const [chartResult, setChartResult] = useState(null);
+  const [chartSql, setChartSql] = useState('');
   const [sql, setSql] = useState('');
   const [summary, setSummary] = useState('');
   const [answer, setAnswer] = useState('');
@@ -35,10 +36,10 @@ function App() {
     localStorage.setItem('history', JSON.stringify(history));
   }, [history]);
 
-  const addHistory = (question, summaryText, answerText, sqlText, resultData, modelName) => {
+  const addHistory = (question, summaryText, answerText, sqlText, resultData, modelName, chartSqlText) => {
     setHistory((prev) => [
       ...prev,
-      { question, summary: summaryText, answer: answerText, sql: sqlText, result: resultData, model: modelName },
+      { question, summary: summaryText, answer: answerText, sql: sqlText, result: resultData, model: modelName, chartSql: chartSqlText },
     ]);
   };
 
@@ -76,6 +77,7 @@ function App() {
       if (!sqlResp.ok) throw new Error('Failed to generate SQL');
       const sqlData = await sqlResp.json();
       if (sqlData.error) throw new Error(sqlData.error);
+      setChartSql(sqlData.sql);
       const execResp = await fetch('/api/sql/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -86,9 +88,12 @@ function App() {
       if (execData.error) throw new Error(execData.error.message || 'Server error');
       const chartResults = execData.result?.results || execData.results || [];
       setChartResult(chartResults);
+      return { chartResults, chartSql: sqlData.sql };
     } catch (_) {
       // ignore chart errors
       setChartResult(null);
+      setChartSql('');
+      return { chartResults: null, chartSql: '' };
     }
   };
 
@@ -121,8 +126,8 @@ function App() {
     setSql(sqlText);
     setGeojson(geo);
 
-    addHistory(questionParam, summaryText, answerText, sqlText, results, model);
-    fetchChartData(questionParam);
+    const { chartResults, chartSql: chartSqlText } = await fetchChartData(questionParam);
+    addHistory(questionParam, summaryText, answerText, sqlText, results, model, chartSqlText);
   };
 
   const handleSubmit = async (e) => {
@@ -135,6 +140,7 @@ function App() {
     setError(null);
     setResult(null);
     setChartResult(null);
+    setChartSql('');
     setSql('');
     setSummary('');
     setAnswer('');
@@ -163,6 +169,7 @@ function App() {
     setError(null);
     setResult(null);
     setChartResult(null);
+    setChartSql('');
     setSummary('');
     setAnswer('');
     setGeojson(null);
@@ -180,6 +187,7 @@ function App() {
     setSql(item.sql || '');
     setResult(item.result || null);
     setChartResult(item.result || null);
+    setChartSql(item.chartSql || '');
     setSummary(item.summary || '');
     setAnswer(item.answer || '');
     setGeojson(null);
@@ -265,6 +273,16 @@ function App() {
               </tbody>
             </table>
             <ResultChart data={chartResult || result} />
+            {chartSql && (
+              <div className="mt-2">
+                <label className="font-semibold">Chart SQL:</label>
+                <textarea
+                  readOnly
+                  value={chartSql}
+                  className="w-full border rounded p-2 h-20 font-mono mt-1"
+                />
+              </div>
+            )}
           </div>
         )}
 
