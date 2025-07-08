@@ -51,7 +51,11 @@ function App() {
         const resp = await fetch('/api/models');
         if (resp.ok) {
           const data = await resp.json();
-          const ms = Array.isArray(data.models) ? data.models : [];
+          const ms = Array.isArray(data.models)
+            ? data.models
+            : Array.isArray(data.result?.models)
+            ? data.result.models
+            : [];
           setModels(ms);
           if (ms.length > 0) {
             setModel(ms[0]);
