@@ -33,10 +33,10 @@ function App() {
     localStorage.setItem('history', JSON.stringify(history));
   }, [history]);
 
-  const addHistory = (question, summaryText, answerText, sqlText, resultData, modelName, chartSqlText) => {
+  const addHistory = (question, summaryText, answerText, sqlText, resultData, modelName, chartSqlText, chartResultData) => {
     setHistory((prev) => [
       ...prev,
-      { question, summary: summaryText, answer: answerText, sql: sqlText, result: resultData, model: modelName, chartSql: chartSqlText },
+      { question, summary: summaryText, answer: answerText, sql: sqlText, result: resultData, model: modelName, chartSql: chartSqlText, chartResult: chartResultData },
     ]);
   };
 
@@ -119,8 +119,8 @@ function App() {
     setSql(sqlText);
     setGeojson(geo);
 
-    const { chartSql: chartSqlText } = await fetchChartData(questionParam);
-    addHistory(questionParam, summaryText, answerText, sqlText, results, model, chartSqlText);
+    const { chartResults, chartSql: chartSqlText } = await fetchChartData(questionParam);
+    addHistory(questionParam, summaryText, answerText, sqlText, results, model, chartSqlText, chartResults);
   };
 
   const handleSubmit = async (e) => {
@@ -179,7 +179,7 @@ function App() {
     setQuery(item.question || '');
     setSql(item.sql || '');
     setResult(item.result || null);
-    setChartResult(item.result || null);
+    setChartResult(item.chartResult || null);
     setChartSql(item.chartSql || '');
     setSummary(item.summary || '');
     setAnswer(item.answer || '');
