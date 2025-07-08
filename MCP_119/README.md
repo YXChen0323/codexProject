@@ -37,6 +37,8 @@ This instructs the LLM to return more rows with the same columns so the
 chart can show data from additional records (for example other fire
 stations) while the main answer and table remain based on the original
 question.
+The additional SQL used to fetch data for the chart is now shown below the
+main query results so you can inspect or reuse it if needed.
 
 Stop the stack:
 
