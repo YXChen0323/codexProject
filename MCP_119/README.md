@@ -7,6 +7,7 @@ This directory contains the `docker-compose.yaml` file that sets up the followin
 - **PostgreSQL** - with PostGIS support using the `postgis/postgis:15-3.4` image.
 - **FastAPI** - simple API server.
 - **Nginx** - reverse proxy exposing the API under `/api/`.
+  All backend endpoints return JSON-RPC 2.0 formatted responses.
 
 The `fastapi` service connects to the PostgreSQL container using environment
 variables defined in `docker-compose.yaml`. If you need to customise the
