@@ -6,7 +6,7 @@ import HistorySidebar from './HistorySidebar';
 import ResultChart from './ResultChart';
 import { Trash2 } from 'lucide-react';
 
-const CHART_QUERY_SUFFIX = '加入更多相同欄位的資料';
+const CHART_QUERY_SUFFIX = '加入更多相同欄位的資料，搜尋整個欄位找出最佳站點';
 
 function App() {
   const [query, setQuery] = useState('');
