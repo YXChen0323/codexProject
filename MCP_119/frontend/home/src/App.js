@@ -8,6 +8,7 @@ import ResultChart from './ResultChart';
 function App() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
+  const [chartResult, setChartResult] = useState(null);
   const [sql, setSql] = useState('');
   const [summary, setSummary] = useState('');
   const [answer, setAnswer] = useState('');
@@ -58,6 +59,33 @@ function App() {
     fetchModels();
   }, []);
 
+  const fetchChartData = async (questionParam) => {
+    const chartQuestion = `${questionParam}，加入更多相同欄位的資料`;
+    try {
+      const sqlResp = await fetch('/api/sql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: chartQuestion, model })
+      });
+      if (!sqlResp.ok) throw new Error('Failed to generate SQL');
+      const sqlData = await sqlResp.json();
+      if (sqlData.error) throw new Error(sqlData.error);
+      const execResp = await fetch('/api/sql/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: sqlData.sql, model, question: chartQuestion })
+      });
+      if (!execResp.ok) throw new Error('Failed to fetch data');
+      const execData = await execResp.json();
+      if (execData.error) throw new Error(execData.error.message || 'Server error');
+      const chartResults = execData.result?.results || execData.results || [];
+      setChartResult(chartResults);
+    } catch (_) {
+      // ignore chart errors
+      setChartResult(null);
+    }
+  };
+
   const executeSql = async (querySql, questionParam = query) => {
     const response = await fetch('/api/sql/execute', {
       method: 'POST',
@@ -88,6 +116,7 @@ function App() {
     setGeojson(geo);
 
     addHistory(questionParam, summaryText, answerText, sqlText, results, model);
+    fetchChartData(questionParam);
   };
 
   const handleSubmit = async (e) => {
@@ -99,6 +128,7 @@ function App() {
     setLoading(true);
     setError(null);
     setResult(null);
+    setChartResult(null);
     setSql('');
     setSummary('');
     setAnswer('');
@@ -126,6 +156,7 @@ function App() {
     setLoading(true);
     setError(null);
     setResult(null);
+    setChartResult(null);
     setSummary('');
     setAnswer('');
     setGeojson(null);
@@ -142,6 +173,7 @@ function App() {
     setQuery(item.question || '');
     setSql(item.sql || '');
     setResult(item.result || null);
+    setChartResult(item.result || null);
     setSummary(item.summary || '');
     setAnswer(item.answer || '');
     setGeojson(null);
@@ -226,7 +258,7 @@ function App() {
                 ))}
               </tbody>
             </table>
-            <ResultChart data={result} />
+            <ResultChart data={chartResult || result} />
           </div>
         )}
 
