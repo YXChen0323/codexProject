@@ -64,6 +64,12 @@ class SQLExecuteRequest(BaseModel):
     model: str | None = None
     question: str | None = None
 
+
+class AskRequest(BaseModel):
+    question: str
+    model: str | None = None
+    user_id: str | None = None
+
 @app.get("/")
 async def root():
     """Return a simple greeting for the API root."""
@@ -204,6 +210,53 @@ async def execute_sql(request: SQLExecuteRequest):
         "results": results,
         "model": request.model,
         "sql": request.query,
+        "summary": summary,
+        "answer": answer,
+        "geojson": geojson,
+    })
+
+
+@app.post("/ask")
+@app.post("/api/ask")
+async def ask(request: AskRequest):
+    """Generate SQL from a question, execute it, and return the results."""
+    try:
+        sql = sql_generator.generate_sql(request.question, model=request.model)
+    except ValueError as exc:
+        return jsonrpc.build_response(
+            error={"code": -32000, "message": str(exc)}
+        )
+    except Exception as exc:  # pragma: no cover - depends on environment
+        return jsonrpc.build_response(
+            error={"code": -32000, "message": str(exc)}
+        )
+
+    try:
+        results = database.execute_query(sql)
+    except Exception as exc:  # pragma: no cover - depends on environment
+        return jsonrpc.build_response(
+            error={"code": -32000, "message": str(exc)}
+        )
+
+    if request.user_id:
+        context_manager.record(request.user_id, sql, json.dumps(results))
+
+    summary = summarize_results(results)
+    geojson = results_to_geojson(results)
+    answer = ""
+    try:
+        answer = answer_generator.generate_answer(
+            request.question,
+            results,
+            model=request.model or "llama3.2:3b",
+        )
+    except Exception:  # pragma: no cover - depends on environment
+        answer = ""
+
+    return jsonrpc.build_response(result={
+        "results": results,
+        "model": request.model,
+        "sql": sql,
         "summary": summary,
         "answer": answer,
         "geojson": geojson,
