@@ -67,12 +67,12 @@ class SQLExecuteRequest(BaseModel):
 @app.get("/")
 async def root():
     """Return a simple greeting for the API root."""
-    return {"message": "Welcome"}
+    return jsonrpc.build_response(result={"message": "Welcome"})
 
 
 @app.get("/hello")
 async def read_root():
-    return {"message": "Hello from FastAPI"}
+    return jsonrpc.build_response(result={"message": "Hello from FastAPI"})
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -101,7 +101,7 @@ async def handle_query(request: QueryRequest):
 async def select_model(request: ModelRequest):
     """Select a model based on user or task information."""
     model_name = router.route(task_type=request.task_type, user_id=request.user_id)
-    return {"model": model_name}
+    return jsonrpc.build_response(result={"model": model_name})
 
 
 @app.get("/models")
@@ -109,7 +109,7 @@ async def select_model(request: ModelRequest):
 async def list_models():
     """Return the list of available model names."""
     models = router.list_models()
-    return {"models": models}
+    return jsonrpc.build_response(result={"models": models})
 
 
 @app.post("/prompt")
@@ -118,7 +118,7 @@ async def build_prompt(request: PromptRequest):
     """Return a prompt with the user's query filled in."""
     template = prompt_templates.load_template(request.model, request.task)
     prompt = prompt_templates.fill_template(template, request.query)
-    return {"prompt": prompt}
+    return jsonrpc.build_response(result={"prompt": prompt})
 
 
 @app.post("/context/record")
@@ -126,7 +126,7 @@ async def build_prompt(request: PromptRequest):
 async def record_interaction(request: RecordRequest):
     """Record a user query and response in the conversation context."""
     context_manager.record(request.user_id, request.query, request.response)
-    return {"status": "ok"}
+    return jsonrpc.build_response(result={"status": "ok"})
 
 
 @app.post("/context/retrieve")
@@ -134,7 +134,7 @@ async def record_interaction(request: RecordRequest):
 async def retrieve_history(request: RetrieveRequest):
     """Retrieve the conversation history for a user."""
     messages = context_manager.get_history(request.user_id)
-    return {"history": [m.__dict__ for m in messages]}
+    return jsonrpc.build_response(result={"history": [m.__dict__ for m in messages]})
 
 
 @app.post("/context/reset")
@@ -142,7 +142,7 @@ async def retrieve_history(request: RetrieveRequest):
 async def reset_history(request: ResetRequest):
     """Delete all conversation history for a user."""
     context_manager.reset(request.user_id)
-    return {"status": "ok"}
+    return jsonrpc.build_response(result={"status": "ok"})
 
 
 @app.get("/context/history")
@@ -150,7 +150,7 @@ async def reset_history(request: ResetRequest):
 async def get_history(user_id: str):
     """Return the message history for a user."""
     messages = context_manager.get_history(user_id)
-    return {"history": [m.__dict__ for m in messages]}
+    return jsonrpc.build_response(result={"history": [m.__dict__ for m in messages]})
 
 
 @app.get("/context/summary")
@@ -158,7 +158,7 @@ async def get_history(user_id: str):
 async def get_summary(user_id: str):
     """Return a summary of the conversation history for a user."""
     summary = context_manager.summarize(user_id)
-    return {"summary": summary}
+    return jsonrpc.build_response(result={"summary": summary})
 
 
 @app.post("/sql")
@@ -168,10 +168,14 @@ async def generate_sql(request: SQLRequest):
     try:
         sql = sql_generator.generate_sql(request.question, model=request.model)
     except ValueError as exc:
-        return {"error": str(exc)}
+        return jsonrpc.build_response(
+            error={"code": -32000, "message": str(exc)}
+        )
     except Exception as exc:  # pragma: no cover - depends on environment
-        return {"error": str(exc)}
-    return {"sql": sql}
+        return jsonrpc.build_response(
+            error={"code": -32000, "message": str(exc)}
+        )
+    return jsonrpc.build_response(result={"sql": sql})
 
 
 @app.post("/sql/execute")
