@@ -84,6 +84,7 @@ function App() {
 
       const results = execData.result?.results || execData.results || [];
       setChartResult(results);
+      setChartSql(sqlData.sql);
       return { chartResults: results, chartSql: sqlData.sql };
     } catch (_) {
       setChartResult(null);
