@@ -72,6 +72,16 @@ def test_generate_sql_codeblock(monkeypatch):
     monkeypatch.setattr(urlrequest, "urlopen", fake_urlopen)
     monkeypatch.setattr(database, "describe_schema", lambda: "tbl(col)")
     monkeypatch.setattr(database, "get_random_rows", lambda *a, **k: [{"id": 1}])
-    monkeypatch.setattr(database, "get_table_columns", lambda *a, **k: ["id"]) 
+    monkeypatch.setattr(database, "get_table_columns", lambda *a, **k: ["id"])
     sql = sql_generator.generate_sql("question")
+    assert sql == "SELECT 1;"
+
+
+def test_generate_chart_sql(monkeypatch):
+    def fake_generate_sql(question: str, *, model: str | None = None):
+        assert question == "q，" + sql_generator.CHART_QUERY_SUFFIX
+        return "SELECT 1;"
+
+    monkeypatch.setattr(sql_generator, "generate_sql", fake_generate_sql)
+    sql = sql_generator.generate_chart_sql("q", model="m")
     assert sql == "SELECT 1;"
