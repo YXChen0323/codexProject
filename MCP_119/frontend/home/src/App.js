@@ -5,6 +5,12 @@ import MapView from './MapView';
 import HistorySidebar from './HistorySidebar';
 import ResultChart from './ResultChart';
 
+// Suffix appended to the user's question when requesting
+// additional data for chart rendering. This prompts the LLM
+// to return more rows with the same fields so the chart can
+// visualise data such as other fire stations in the example.
+const CHART_QUERY_SUFFIX = '加入更多相同欄位的資料';
+
 function App() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
@@ -60,7 +66,7 @@ function App() {
   }, []);
 
   const fetchChartData = async (questionParam) => {
-    const chartQuestion = `${questionParam}，加入更多相同欄位的資料`;
+    const chartQuestion = `${questionParam}，${CHART_QUERY_SUFFIX}`;
     try {
       const sqlResp = await fetch('/api/sql', {
         method: 'POST',
