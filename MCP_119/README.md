@@ -31,6 +31,12 @@ Before running the stack for the first time, build the React application so Ngin
 ```
 
 The frontend also visualizes query results using a simple bar chart when numeric data is available.
+When preparing the chart, the UI sends a second query by appending
+"加入更多相同欄位的資料" to the user's original question.
+This instructs the LLM to return more rows with the same columns so the
+chart can show data from additional records (for example other fire
+stations) while the main answer and table remain based on the original
+question.
 
 Stop the stack:
 
