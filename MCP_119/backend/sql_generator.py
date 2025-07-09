@@ -10,10 +10,6 @@ import prompt_templates
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
 
-# When generating chart data the UI appends this suffix to the user's
-# original question to request additional rows with the same columns and
-# search the entire column to find the best station.
-CHART_QUERY_SUFFIX = "加入更多相同欄位的資料，搜尋整個欄位找出最佳站點"
 
 
 SQL_START = re.compile(r"^(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|WITH)\b", re.IGNORECASE)
@@ -93,7 +89,3 @@ def generate_sql(question: str, *, model: str | None = None) -> str:
     return sql
 
 
-def generate_chart_sql(question: str, *, model: str | None = None) -> str:
-    """Generate SQL for chart data based on the user's question."""
-    chart_question = f"{question}，{CHART_QUERY_SUFFIX}"
-    return generate_sql(chart_question, model=model)
