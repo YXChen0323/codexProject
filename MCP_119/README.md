@@ -37,6 +37,10 @@ Before running the stack for the first time, build the React application so Ngin
 
 ```bash
 (cd frontend/home && npm install && npm run build)
+
+The frontend now includes a simple chart view powered by `chart.js` and
+`react-chartjs-2`. Query results will be visualised as a bar chart when
+possible.
 ```
 
 
