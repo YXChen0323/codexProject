@@ -89,3 +89,57 @@ def generate_sql(question: str, *, model: str | None = None) -> str:
     return sql
 
 
+def generate_chart_sql(question: str, *, model: str | None = None) -> str:
+    """Generate an SQL query for chart comparison using an LLM."""
+    if model is None:
+        model = model_router.ModelRouter().route(task_type="sql")
+
+    template = prompt_templates.load_template(model, "chart")
+    schema = database.describe_schema()
+    samples = database.get_random_rows("emergency_calls", limit=3, schema="emergence")
+    sample_text = "\n".join(str(row) for row in samples)
+    columns = database.get_table_columns("emergency_calls", schema="emergence")
+    columns_text = ", ".join(columns)
+    prompt = prompt_templates.fill_template(
+        template,
+        question,
+        schema=schema,
+        samples=sample_text,
+        columns=columns_text,
+    )
+
+    req = urlrequest.Request(
+        OLLAMA_URL,
+        data=json.dumps({"model": model, "prompt": prompt, "stream": False}).encode(),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urlrequest.urlopen(req) as resp:
+        text = resp.read().decode()
+
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        decoder = json.JSONDecoder()
+        remaining = text
+        chunks: list[str] = []
+        last_obj: dict | None = None
+        while remaining.strip():
+            try:
+                obj, idx = decoder.raw_decode(remaining.lstrip())
+            except json.JSONDecodeError:
+                break
+            chunks.append(str(obj.get("response", "")))
+            last_obj = obj
+            remaining = remaining.lstrip()[idx:]
+
+        if last_obj is None:
+            raise
+        last_obj["response"] = "".join(chunks)
+        data = last_obj
+    sql = _clean_sql(data.get("response", ""))
+    if not _is_valid_sql(sql):
+        raise ValueError(f"Generated text is not valid SQL: {sql}")
+    return sql
+
+

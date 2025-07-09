@@ -70,6 +70,12 @@ class AskRequest(BaseModel):
     model: str | None = None
     user_id: str | None = None
 
+
+class ChartRequest(BaseModel):
+    question: str
+    model: str | None = None
+    user_id: str | None = None
+
 @app.get("/")
 async def root():
     """Return a simple greeting for the API root."""
@@ -260,4 +266,41 @@ async def ask(request: AskRequest):
         "summary": summary,
         "answer": answer,
         "geojson": geojson,
+    })
+
+
+@app.post("/chart")
+@app.post("/api/chart")
+async def chart(request: ChartRequest):
+    """Generate comparative chart data using two LLM SQL passes."""
+    try:
+        base_sql = sql_generator.generate_sql(request.question, model=request.model)
+        chart_sql = sql_generator.generate_chart_sql(request.question, model=request.model)
+    except ValueError as exc:
+        return jsonrpc.build_response(
+            error={"code": -32000, "message": str(exc)}
+        )
+    except Exception as exc:  # pragma: no cover - depends on environment
+        return jsonrpc.build_response(
+            error={"code": -32000, "message": str(exc)}
+        )
+
+    try:
+        results = database.execute_query(chart_sql)
+    except Exception as exc:  # pragma: no cover - depends on environment
+        return jsonrpc.build_response(
+            error={"code": -32000, "message": str(exc)}
+        )
+
+    if request.user_id:
+        context_manager.record(request.user_id, chart_sql, json.dumps(results))
+
+    summary = summarize_results(results)
+
+    return jsonrpc.build_response(result={
+        "results": results,
+        "model": request.model,
+        "sql": chart_sql,
+        "base_sql": base_sql,
+        "summary": summary,
     })
