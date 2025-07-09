@@ -39,17 +39,6 @@ Before running the stack for the first time, build the React application so Ngin
 (cd frontend/home && npm install && npm run build)
 ```
 
-The frontend also visualizes query results using a simple bar chart when numeric data is available.
-When preparing the chart, the UI sends a second query by appending
-"加入更多相同欄位的資料，搜尋整個欄位找出最佳站點" to the user's original
-question. This instructs the LLM to return more rows with the same columns
-and also search across the entire column so the chart can show data from
-additional records (for example other fire stations) while the main answer
-and table remain based on the original question.
-The additional SQL used to fetch data for the chart is now shown below the
-main query results so you can inspect or reuse it if needed.
-You can also generate this follow-up query directly using the
-`generate_chart_sql()` helper in `backend/sql_generator.py`.
 
 Stop the stack:
 

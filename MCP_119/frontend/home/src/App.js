@@ -3,16 +3,13 @@ import './App.css';
 import Loader from './Loader';
 import MapView from './MapView';
 import HistorySidebar from './HistorySidebar';
-import ResultChart from './ResultChart';
 import { Trash2 } from 'lucide-react';
 
-const CHART_QUERY_SUFFIX = '加入更多相同欄位的資料，搜尋整個欄位找出最佳站點';
+
 
 function App() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
-  const [chartResult, setChartResult] = useState(null);
-  const [chartSql, setChartSql] = useState('');
   const [sql, setSql] = useState('');
   const [summary, setSummary] = useState('');
   const [answer, setAnswer] = useState('');
@@ -33,10 +30,10 @@ function App() {
     localStorage.setItem('history', JSON.stringify(history));
   }, [history]);
 
-  const addHistory = (question, summaryText, answerText, sqlText, resultData, modelName, chartSqlText, chartResultData) => {
+  const addHistory = (question, summaryText, answerText, sqlText, resultData, modelName) => {
     setHistory((prev) => [
       ...prev,
-      { question, summary: summaryText, answer: answerText, sql: sqlText, result: resultData, model: modelName, chartSql: chartSqlText, chartResult: chartResultData },
+      { question, summary: summaryText, answer: answerText, sql: sqlText, result: resultData, model: modelName },
     ]);
   };
 
@@ -66,39 +63,7 @@ function App() {
     fetchModels();
   }, []);
 
-  const fetchChartData = async (questionParam) => {
-    const chartQuestion = `${questionParam}，${CHART_QUERY_SUFFIX}`;
-    try {
-      const sqlResp = await fetch('/api/sql', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: chartQuestion, model })
-      });
-      if (!sqlResp.ok) throw new Error('Failed to generate SQL');
-      const sqlData = await sqlResp.json();
-      if (sqlData.error) throw new Error(sqlData.error);
 
-      const chartSql = sqlData.result?.sql || sqlData.sql || '';
-
-      const execResp = await fetch('/api/sql/execute', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: chartSql, model, question: chartQuestion })
-      });
-      if (!execResp.ok) throw new Error('Failed to fetch data');
-      const execData = await execResp.json();
-      if (execData.error) throw new Error(execData.error.message || 'Server error');
-
-      const results = execData.result?.results || execData.results || [];
-      setChartResult(results);
-      setChartSql(chartSql);
-      return { chartResults: results, chartSql }; 
-    } catch (_) {
-      setChartResult(null);
-      setChartSql('');
-      return { chartResults: null, chartSql: '' };
-    }
-  };
 
   const executeSql = async (querySql, questionParam = query) => {
     const response = await fetch('/api/sql/execute', {
@@ -126,8 +91,7 @@ function App() {
     setSql(sqlText);
     setGeojson(geo);
 
-    const { chartResults, chartSql: chartSqlText } = await fetchChartData(questionParam);
-    addHistory(questionParam, summaryText, answerText, sqlText, results, model, chartSqlText, chartResults);
+    addHistory(questionParam, summaryText, answerText, sqlText, results, model);
   };
 
   const handleSubmit = async (e) => {
@@ -139,8 +103,6 @@ function App() {
     setLoading(true);
     setError(null);
     setResult(null);
-    setChartResult(null);
-    setChartSql('');
     setSql('');
     setSummary('');
     setAnswer('');
@@ -169,8 +131,6 @@ function App() {
     setLoading(true);
     setError(null);
     setResult(null);
-    setChartResult(null);
-    setChartSql('');
     setSummary('');
     setAnswer('');
     setGeojson(null);
@@ -187,8 +147,6 @@ function App() {
     setQuery(item.question || '');
     setSql(item.sql || '');
     setResult(item.result || null);
-    setChartResult(item.chartResult || null);
-    setChartSql(item.chartSql || '');
     setSummary(item.summary || '');
     setAnswer(item.answer || '');
     setGeojson(null);
@@ -287,19 +245,6 @@ function App() {
                   </tbody>
                 </table>
               </div>
-              <div className="overflow-x-auto">
-                <ResultChart data={chartResult || result} />
-              </div>
-              {chartSql && (
-                <div>
-                  <label className="font-semibold">Chart SQL:</label>
-                  <textarea
-                    readOnly
-                    value={chartSql}
-                    className="w-full border rounded p-2 h-20 font-mono mt-1"
-                  />
-                </div>
-              )}
             </section>
           )}
 
