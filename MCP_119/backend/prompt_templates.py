@@ -14,6 +14,15 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
+        "chart": (
+            "Given the database schema:\n{schema}\n"
+            "The table to query is `emergency_calls` in the `emergence` schema.\n"
+            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
+        ),
     },
     "qwen2.5-coder:7b": {
         "sql": (
@@ -24,6 +33,15 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
             "Write an SQL query for the following natural language question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
+        ),
+        "chart": (
+            "Given the database schema:\n{schema}\n"
+            "The table to query is `emergency_calls` in the `emergence` schema.\n"
+            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
@@ -42,6 +60,15 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
+        "chart": (
+            "Given the database schema:\n{schema}\n"
+            "The table to query is `emergency_calls` in the `emergence` schema.\n"
+            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
+        ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
             "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
@@ -58,6 +85,15 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Write an SQL query for the following natural language question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
+        "chart": (
+            "Given the database schema:\n{schema}\n"
+            "The table to query is `emergency_calls` in the `emergence` schema.\n"
+            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
+        ),
     },
     "llama3.2:3b": {
         "sql": (
@@ -68,6 +104,15 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
             "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
             "Write an SQL query for the following natural language question: {query}\n"
+            "Respond only with a valid SQL statement. Do not include any explanations or extra text."
+        ),
+        "chart": (
+            "Given the database schema:\n{schema}\n"
+            "The table to query is `emergency_calls` in the `emergence` schema.\n"
+            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
+            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Here are 3 randomly sampled records for reference:\n{samples}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (

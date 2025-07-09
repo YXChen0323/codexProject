@@ -109,17 +109,23 @@ function App() {
     setAnswer('');
     setGeojson(null);
     try {
-      const sqlResp = await fetch('/api/sql', {
+      const resp = await fetch('/api/chart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: query, model })
       });
-      if (!sqlResp.ok) throw new Error('Failed to generate SQL');
-      const sqlData = await sqlResp.json();
-      if (sqlData.error) throw new Error(sqlData.error);
-      const generatedSql = sqlData.result?.sql || sqlData.sql || '';
+      if (!resp.ok) throw new Error('Failed to generate chart data');
+      const data = await resp.json();
+      if (data.error) throw new Error(data.error.message || 'Server error');
+      const generatedSql = data.result?.sql || data.sql || '';
+      const results = data.result?.results || data.results || [];
+      const summaryText = data.result?.summary || data.summary || '';
       setSql(generatedSql);
-      await executeSql(generatedSql, query);
+      setResult(results);
+      setSummary(summaryText);
+      setAnswer('');
+      setGeojson(null);
+      addHistory(query, summaryText, '', generatedSql, results, model);
     } catch (err) {
       setError(err.message);
     } finally {
