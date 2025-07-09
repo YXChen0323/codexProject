@@ -19,6 +19,14 @@ Docker Compose, the `OLLAMA_URL` environment variable is set so the backend
 calls the `ollama` container instead. The backend disables streaming when
 requesting a response from Ollama so a complete JSON payload is returned.
 
+The `ollama` service is configured to run with GPU acceleration. It sets
+`NVIDIA_VISIBLE_DEVICES=all` and requires the NVIDIA container runtime. You
+can verify GPU access with:
+
+```bash
+docker compose exec ollama nvidia-smi
+```
+
 Start the stack:
 
 ```bash
