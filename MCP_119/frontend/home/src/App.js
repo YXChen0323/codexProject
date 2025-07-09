@@ -3,6 +3,7 @@ import './App.css';
 import Loader from './Loader';
 import MapView from './MapView';
 import HistorySidebar from './HistorySidebar';
+import ChartView from './ChartView';
 import { Trash2 } from 'lucide-react';
 
 
@@ -246,6 +247,10 @@ function App() {
                 </table>
               </div>
             </section>
+          )}
+
+          {Array.isArray(result) && result.length > 0 && (
+            <ChartView result={result} />
           )}
 
           {(Array.isArray(result) && result.length > 0) || geojson ? (
