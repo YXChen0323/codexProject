@@ -21,8 +21,6 @@ function HistorySidebar({ history, clearHistory, openHistory }) {
               <div>{item.answer}</div>
             ) : item.summary ? (
               <div className="text-gray-600 italic">{item.summary}</div>
-            ) : Array.isArray(item.result) ? (
-              <div className="text-gray-600 italic">共 {item.result.length} 筆資料</div>
             ) : null}
           </li>
         ))}
