@@ -78,10 +78,12 @@ function App() {
       const sqlData = await sqlResp.json();
       if (sqlData.error) throw new Error(sqlData.error);
 
+      const chartSql = sqlData.result?.sql || sqlData.sql || '';
+
       const execResp = await fetch('/api/sql/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: sqlData.sql, model, question: chartQuestion })
+        body: JSON.stringify({ query: chartSql, model, question: chartQuestion })
       });
       if (!execResp.ok) throw new Error('Failed to fetch data');
       const execData = await execResp.json();
@@ -89,8 +91,8 @@ function App() {
 
       const results = execData.result?.results || execData.results || [];
       setChartResult(results);
-      setChartSql(sqlData.sql);
-      return { chartResults: results, chartSql: sqlData.sql };
+      setChartSql(chartSql);
+      return { chartResults: results, chartSql }; 
     } catch (_) {
       setChartResult(null);
       setChartSql('');
@@ -152,8 +154,9 @@ function App() {
       if (!sqlResp.ok) throw new Error('Failed to generate SQL');
       const sqlData = await sqlResp.json();
       if (sqlData.error) throw new Error(sqlData.error);
-      setSql(sqlData.sql);
-      await executeSql(sqlData.sql, query);
+      const generatedSql = sqlData.result?.sql || sqlData.sql || '';
+      setSql(generatedSql);
+      await executeSql(generatedSql, query);
     } catch (err) {
       setError(err.message);
     } finally {
