@@ -12,6 +12,15 @@ def summarize_results(results: list[dict]) -> str:
     return f"共 {row_count} 筆資料，欄位包含 {columns}。"
 
 
+def build_fallback_answer(question: str, results: list[dict]) -> str:
+    """Return a friendly answer using basic info when LLM output is empty."""
+    if not results:
+        return f"抱歉，沒有找到與「{question}」相關的資料。"
+    row_count = len(results)
+    columns = ", ".join(results[0].keys())
+    return f"根據「{question}」，共找到 {row_count} 筆資料，包含 {columns} 等欄位。"
+
+
 def results_to_geojson(rows: list[dict]) -> dict | None:
     """Convert query results to a GeoJSON FeatureCollection if possible."""
     features = []
