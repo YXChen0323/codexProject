@@ -31,6 +31,12 @@ services:
       - "11434:11434"
     volumes:
       - ./valumes/ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    runtime: nvidia
 
   fastapi:
     build:
