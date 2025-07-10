@@ -3,14 +3,29 @@
 import json
 
 
+from . import answer_generator
+
+
 def summarize_results(results: list[dict]) -> str:
-    """Return a short summary for query results. Disabled by default."""
-    return ""
+    """Return a short LLM-generated summary for query results."""
+    if not results:
+        return ""
+    try:
+        return answer_generator.generate_answer(
+            "請以簡短方式概述這些查詢結果", results
+        )
+    except Exception:
+        return ""
 
 
 def build_fallback_answer(question: str, results: list[dict]) -> str:
-    """Return an empty fallback answer."""
-    return ""
+    """Ask the LLM for a friendly fallback answer."""
+    if not results:
+        return ""
+    try:
+        return answer_generator.generate_answer(question, results)
+    except Exception:
+        return ""
 
 
 def results_to_geojson(rows: list[dict]) -> dict | None:
