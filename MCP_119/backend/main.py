@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket
 from pydantic import BaseModel
-from utils import summarize_results, results_to_geojson, build_fallback_answer
+from utils import summarize_results, results_to_geojson
 import json
 from fastapi.middleware.cors import CORSMiddleware
 import jsonrpc
@@ -212,8 +212,6 @@ async def execute_sql(request: SQLExecuteRequest):
             )
         except Exception:  # pragma: no cover - depends on environment
             answer = ""
-    if not answer:
-        answer = build_fallback_answer(request.question or request.query, results)
     return jsonrpc.build_response(result={
         "results": results,
         "model": request.model,
@@ -260,8 +258,6 @@ async def ask(request: AskRequest):
         )
     except Exception:  # pragma: no cover - depends on environment
         answer = ""
-    if not answer:
-        answer = build_fallback_answer(request.question, results)
 
     return jsonrpc.build_response(result={
         "results": results,
@@ -311,8 +307,6 @@ async def chart(request: ChartRequest):
         )
     except Exception:  # pragma: no cover - depends on environment
         answer = ""
-    if not answer:
-        answer = build_fallback_answer(request.question, results)
 
     return jsonrpc.build_response(result={
         "results": results,
