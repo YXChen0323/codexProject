@@ -206,6 +206,9 @@ async def execute_sql(request: SQLExecuteRequest):
     geojson = results_to_geojson(results)
     answer = ""
     if request.question:
+        # Run the NLP template to turn the raw results into a friendly
+        # natural language answer for the frontend.  The prompt template
+        # is loaded inside ``generate_answer`` using the "nlp" task name.
         try:
             answer = answer_generator.generate_answer(
                 request.question, results, model=request.model or "llama3.2:3b"
