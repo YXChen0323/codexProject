@@ -2,24 +2,31 @@
 
 import json
 
+import answer_generator
+
 
 def summarize_results(results: list[dict]) -> str:
-    """Return a short summary for query results or an empty string."""
-    # Some deployments prefer not to expose human friendly messages.
-    # When this behaviour is desired simply return an empty string.
+    """Return a human friendly summary for query results."""
     if not results:
         return ""
-    columns = ", ".join(results[0].keys())
-    return columns
+    try:
+        return answer_generator.generate_answer(
+            "Summarize these query results in one sentence.", results
+        )
+    except Exception:
+        columns = ", ".join(results[0].keys())
+        return columns
 
 
 def build_fallback_answer(question: str, results: list[dict]) -> str:
-    """Return a basic fallback answer or an empty string."""
-    # These responses can be suppressed by returning an empty string.
+    """Return a natural language answer using an LLM as a fallback."""
     if not results:
         return ""
-    columns = ", ".join(results[0].keys())
-    return columns
+    try:
+        return answer_generator.generate_answer(question, results)
+    except Exception:
+        columns = ", ".join(results[0].keys())
+        return columns
 
 
 def results_to_geojson(rows: list[dict]) -> dict | None:
