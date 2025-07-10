@@ -52,3 +52,11 @@ Stop the stack:
 ```bash
 docker compose down
 ```
+
+## Natural language answers
+
+When you execute a query through the `/sql/execute` endpoint (or via the UI),
+the backend automatically runs the `nlp` prompt template with the LLM. This
+generates a friendly natural language explanation of the results that is
+returned in the `answer` field and displayed in the frontend. If the `answer`
+is empty, the UI falls back to a short summary of the data.
