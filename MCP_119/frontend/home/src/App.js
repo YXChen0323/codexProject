@@ -120,12 +120,16 @@ function App() {
       const generatedSql = data.result?.sql || data.sql || '';
       const results = data.result?.results || data.results || [];
       const summaryText = data.result?.summary || data.summary || '';
+      const answerText = data.result?.answer || data.answer || '';
+      const geo = data.result?.geojson || data.geojson || null;
+
       setSql(generatedSql);
       setResult(results);
       setSummary(summaryText);
-      setAnswer('');
-      setGeojson(null);
-      addHistory(query, summaryText, '', generatedSql, results, model);
+      setAnswer(answerText);
+      setGeojson(geo);
+
+      addHistory(query, summaryText, answerText, generatedSql, results, model);
     } catch (err) {
       setError(err.message);
     } finally {

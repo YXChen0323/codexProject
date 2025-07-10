@@ -301,10 +301,25 @@ async def chart(request: ChartRequest):
 
     summary = summarize_results(results)
 
+    geojson = results_to_geojson(results)
+    answer = ""
+    try:
+        answer = answer_generator.generate_answer(
+            request.question,
+            results,
+            model=request.model or "llama3.2:3b",
+        )
+    except Exception:  # pragma: no cover - depends on environment
+        answer = ""
+    if not answer:
+        answer = build_fallback_answer(request.question, results)
+
     return jsonrpc.build_response(result={
         "results": results,
         "model": request.model,
         "sql": chart_sql,
         "base_sql": base_sql,
         "summary": summary,
+        "answer": answer,
+        "geojson": geojson,
     })
