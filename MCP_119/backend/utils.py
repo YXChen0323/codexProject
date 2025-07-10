@@ -4,19 +4,13 @@ import json
 
 
 def summarize_results(results: list[dict]) -> str:
-    """Return a short human friendly summary for query results."""
-    if not results:
-        return "沒有任何資料。"
-    columns = ", ".join(results[0].keys())
-    return f"欄位包含 {columns}。"
+    """Return a short summary for query results. Disabled by default."""
+    return ""
 
 
 def build_fallback_answer(question: str, results: list[dict]) -> str:
-    """Return a friendly answer using basic info when LLM output is empty."""
-    if not results:
-        return f"抱歉，沒有找到與「{question}」相關的資料。"
-    columns = ", ".join(results[0].keys())
-    return f"以下是「{question}」的查詢結果，包含 {columns} 等欄位。"
+    """Return an empty fallback answer."""
+    return ""
 
 
 def results_to_geojson(rows: list[dict]) -> dict | None:
