@@ -4,6 +4,7 @@ import Loader from './Loader';
 import MapView from './MapView';
 import HistorySidebar from './HistorySidebar';
 import ChartView from './ChartView';
+import FinalResponse from './FinalResponse';
 import { Trash2 } from 'lucide-react';
 
 
@@ -267,11 +268,7 @@ function App() {
             <MapView data={result || []} geojson={geojson} />
           ) : null}
 
-          {answer ? (
-            <div className="text-gray-800">{answer}</div>
-          ) : (
-            summary && <div className="text-gray-600 italic">{summary}</div>
-          )}
+          <FinalResponse answer={answer} summary={summary} />
         </div>
 
         <HistorySidebar history={history} clearHistory={clearHistory} openHistory={openHistory} />
