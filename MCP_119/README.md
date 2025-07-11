@@ -62,3 +62,5 @@ returned in the `answer` field and displayed in the frontend. If no question is
 provided, the results are summarised with the same model to produce a brief
 description. If the `answer` is empty, the UI falls back to a short summary of
 the data.
+The prompt was adjusted to remove the required follow-up question so answers
+sound more natural.

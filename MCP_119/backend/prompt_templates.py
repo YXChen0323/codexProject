@@ -46,8 +46,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
-            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear. "
-            "Finish your answer with a short follow-up question to keep the conversation going."
+            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
         ),
     },
     "qwen2.5-coder:3b": {
@@ -72,8 +71,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
-            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear. "
-            "Finish your answer with a short follow-up question to keep the conversation going."
+            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
         ),
     },
     "sqlcoder:7b": {
@@ -119,8 +117,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         ),
         "nlp": (
             "Given the SQL query results:\n{results}\n"
-            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear. "
-            "Finish your answer with a short follow-up question to keep the conversation going."
+            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
         ),
     },
 }
