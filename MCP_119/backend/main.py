@@ -204,17 +204,18 @@ async def execute_sql(request: SQLExecuteRequest):
         context_manager.record(request.user_id, request.query, json.dumps(results))
     summary = summarize_results(results)
     geojson = results_to_geojson(results)
-    answer = ""
-    if request.question:
-        # Run the NLP template to turn the raw results into a friendly
-        # natural language answer for the frontend.  The prompt template
-        # is loaded inside ``generate_answer`` using the "nlp" task name.
-        try:
-            answer = answer_generator.generate_answer(
-                request.question, results, model=request.model or "llama3.2:3b"
-            )
-        except Exception:  # pragma: no cover - depends on environment
-            answer = ""
+    # Always try to provide a natural language explanation of the results
+    prompt_question = (
+        request.question or "Summarize these query results in a friendly way."
+    )
+    try:
+        answer = answer_generator.generate_answer(
+            prompt_question,
+            results,
+            model=request.model or "llama3.2:3b",
+        )
+    except Exception:  # pragma: no cover - depends on environment
+        answer = ""
     return jsonrpc.build_response(result={
         "results": results,
         "model": request.model,
