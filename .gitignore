@@ -5,7 +5,7 @@ __pycache__/
 
 # Build artifacts
 MCP_119/frontend/home/build/
-
+/node_modules
 # Data
 MCP_119/data/
 valumes/
