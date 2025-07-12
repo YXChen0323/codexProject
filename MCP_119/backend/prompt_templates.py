@@ -5,43 +5,33 @@ from typing import Dict
 PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     "phi3:3.8b": {
         "sql": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
-            "Write an SQL query for the following natural language question: {query}\n"
+            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
     },
     "qwen2.5-coder:7b": {
         "sql": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
-            "Write an SQL query for the following natural language question: {query}\n"
+            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
@@ -51,22 +41,17 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     },
     "qwen2.5-coder:3b": {
         "sql": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
-            "Write an SQL query for the following natural language question: {query}\n"
+            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
@@ -76,43 +61,33 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     },
     "sqlcoder:7b": {
         "sql": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
-            "Write an SQL query for the following natural language question: {query}\n"
+            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
     },
     "llama3.2:3b": {
         "sql": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "When generating the SQL, you may incorporate additional columns and inferred conditions that could provide meaningful context, even if these details are not explicitly mentioned by the user.\n"
-            "Write an SQL query for the following natural language question: {query}\n"
+            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
-            "Given the database schema:\n{schema}\n"
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
-            "Always use `FROM emergence.emergency_calls` in the SQL.\n"
-            "Table columns include: {columns} (you must use these column names exactly as provided, including spacing and capitalization).\n"
+            "Use only these columns exactly as provided: {columns}.\n"
             "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based on the question: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
@@ -135,11 +110,16 @@ def fill_template(template: str, query: str, **extra: str) -> str:
 
 
 def build_prompt_with_history(
-    model: str, task: str, query: str, history: list, results: str | None = None
+    model: str,
+    task: str,
+    query: str,
+    history: list,
+    results: str | None = None,
+    **extra: str,
 ) -> str:
-    """Return a prompt that includes conversation history and optional query results."""
+    """Return a prompt that includes conversation history and optional data."""
     template = load_template(model, task)
-    base_prompt = fill_template(template, query, results=results or "")
+    base_prompt = fill_template(template, query, results=results or "", **extra)
     if not history:
         return base_prompt
     history_text = "\n".join(f"{m.role}: {m.content}" for m in history)

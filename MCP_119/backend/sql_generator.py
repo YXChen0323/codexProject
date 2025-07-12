@@ -32,21 +32,25 @@ def _clean_sql(sql: str) -> str:
     return sql
 
 
-def generate_sql(question: str, *, model: str | None = None) -> str:
+def generate_sql(
+    question: str,
+    *,
+    model: str | None = None,
+    history: list | None = None,
+) -> str:
     """Generate an SQL query from a natural language question using an LLM."""
     if model is None:
         model = model_router.ModelRouter().route(task_type="sql")
 
-    template = prompt_templates.load_template(model, "sql")
-    schema = database.describe_schema()
     samples = database.get_random_rows("emergency_calls", limit=3, schema="emergence")
     sample_text = "\n".join(str(row) for row in samples)
     columns = database.get_table_columns("emergency_calls", schema="emergence")
     columns_text = ", ".join(columns)
-    prompt = prompt_templates.fill_template(
-        template,
+    prompt = prompt_templates.build_prompt_with_history(
+        model,
+        "sql",
         question,
-        schema=schema,
+        history or [],
         samples=sample_text,
         columns=columns_text,
     )
@@ -89,21 +93,25 @@ def generate_sql(question: str, *, model: str | None = None) -> str:
     return sql
 
 
-def generate_chart_sql(question: str, *, model: str | None = None) -> str:
+def generate_chart_sql(
+    question: str,
+    *,
+    model: str | None = None,
+    history: list | None = None,
+) -> str:
     """Generate an SQL query for chart comparison using an LLM."""
     if model is None:
         model = model_router.ModelRouter().route(task_type="sql")
 
-    template = prompt_templates.load_template(model, "chart")
-    schema = database.describe_schema()
     samples = database.get_random_rows("emergency_calls", limit=3, schema="emergence")
     sample_text = "\n".join(str(row) for row in samples)
     columns = database.get_table_columns("emergency_calls", schema="emergence")
     columns_text = ", ".join(columns)
-    prompt = prompt_templates.fill_template(
-        template,
+    prompt = prompt_templates.build_prompt_with_history(
+        model,
+        "chart",
         question,
-        schema=schema,
+        history or [],
         samples=sample_text,
         columns=columns_text,
     )
