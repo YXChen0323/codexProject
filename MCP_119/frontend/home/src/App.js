@@ -144,6 +144,7 @@ function App() {
         if (data.error) throw new Error(data.error.message || 'Server error');
         const generatedSql = data.result?.sql || data.sql || '';
         setSql(generatedSql);
+        await executeSql(generatedSql, query);
       }
     } catch (err) {
       setError(err.message);
