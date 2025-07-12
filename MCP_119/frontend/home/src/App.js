@@ -20,6 +20,7 @@ function App() {
   const [models, setModels] = useState([]);
   const [model, setModel] = useState('');
   const [geojson, setGeojson] = useState(null);
+  const [useChart, setUseChart] = useState(false);
   const [history, setHistory] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('history')) || [];
@@ -110,27 +111,40 @@ function App() {
     setAnswer('');
     setGeojson(null);
     try {
-      const resp = await fetch('/api/chart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: query, model })
-      });
-      if (!resp.ok) throw new Error('Failed to generate chart data');
-      const data = await resp.json();
-      if (data.error) throw new Error(data.error.message || 'Server error');
-      const generatedSql = data.result?.sql || data.sql || '';
-      const results = data.result?.results || data.results || [];
-      const summaryText = data.result?.summary || data.summary || '';
-      const answerText = data.result?.answer || data.answer || '';
-      const geo = data.result?.geojson || data.geojson || null;
+      if (useChart) {
+        const resp = await fetch('/api/chart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: query, model })
+        });
+        if (!resp.ok) throw new Error('Failed to generate chart data');
+        const data = await resp.json();
+        if (data.error) throw new Error(data.error.message || 'Server error');
+        const generatedSql = data.result?.sql || data.sql || '';
+        const results = data.result?.results || data.results || [];
+        const summaryText = data.result?.summary || data.summary || '';
+        const answerText = data.result?.answer || data.answer || '';
+        const geo = data.result?.geojson || data.geojson || null;
 
-      setSql(generatedSql);
-      setResult(results);
-      setSummary(summaryText);
-      setAnswer(answerText);
-      setGeojson(geo);
+        setSql(generatedSql);
+        setResult(results);
+        setSummary(summaryText);
+        setAnswer(answerText);
+        setGeojson(geo);
 
-      addHistory(query, summaryText, answerText, generatedSql, results, model);
+        addHistory(query, summaryText, answerText, generatedSql, results, model);
+      } else {
+        const resp = await fetch('/api/sql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: query, model })
+        });
+        if (!resp.ok) throw new Error('Failed to generate SQL');
+        const data = await resp.json();
+        if (data.error) throw new Error(data.error.message || 'Server error');
+        const generatedSql = data.result?.sql || data.sql || '';
+        setSql(generatedSql);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -195,6 +209,14 @@ function App() {
               placeholder="輸入你的問題"
               className="border rounded p-2 flex-1"
             />
+            <label className="flex items-center space-x-1">
+              <input
+                type="checkbox"
+                checked={useChart}
+                onChange={(e) => setUseChart(e.target.checked)}
+              />
+              <span>生成圖表</span>
+            </label>
             <button
               type="submit"
               disabled={loading}
