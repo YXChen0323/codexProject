@@ -31,8 +31,12 @@ services:
       - "11434:11434"
     volumes:
       - ./valumes/ollama_data:/root/.ollama
-
-    
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
 
   fastapi:
     build:
@@ -66,3 +70,6 @@ volumes:
   postgres_data:
   ollama_data:
   pgadmin_data:
+
+environment:
+  - NVIDIA_VISIBLE_DEVICES=all
