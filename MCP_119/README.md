@@ -42,8 +42,10 @@ Before running the stack for the first time, build the React application so Ngin
 (cd frontend/home && npm install && npm run build)
 
 The frontend now includes a simple chart view powered by `chart.js` and
-`react-chartjs-2`. Query results will be visualised as a bar chart when
-possible.
+`react-chartjs-2`. A checkbox lets you choose whether to generate a chart.
+When unchecked, the UI only generates SQL from your question without
+executing it. Enable the checkbox if you want chart data returned and
+visualised as a bar chart when possible.
 ```
 
 
