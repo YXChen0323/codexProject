@@ -31,13 +31,7 @@ services:
       - "11434:11434"
     volumes:
       - ./valumes/ollama_data:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ['0']
-              capabilities: [gpu]
+
     
 
   fastapi:
