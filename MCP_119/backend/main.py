@@ -56,6 +56,7 @@ class ResetRequest(BaseModel):
 class SQLRequest(BaseModel):
     question: str
     model: str | None = None
+    user_id: str | None = None
 
 
 class SQLExecuteRequest(BaseModel):
@@ -178,7 +179,14 @@ async def get_summary(user_id: str):
 async def generate_sql(request: SQLRequest):
     """Generate an SQL query (including PostGIS syntax) using an LLM."""
     try:
-        sql = sql_generator.generate_sql(request.question, model=request.model)
+        history = (
+            context_manager.get_history(request.user_id)
+            if request.user_id
+            else []
+        )
+        sql = sql_generator.generate_sql(
+            request.question, model=request.model, history=history
+        )
     except ValueError as exc:
         return jsonrpc.build_response(
             error={"code": -32000, "message": str(exc)}
@@ -231,7 +239,14 @@ async def execute_sql(request: SQLExecuteRequest):
 async def ask(request: AskRequest):
     """Generate SQL from a question, execute it, and return the results."""
     try:
-        sql = sql_generator.generate_sql(request.question, model=request.model)
+        history = (
+            context_manager.get_history(request.user_id)
+            if request.user_id
+            else []
+        )
+        sql = sql_generator.generate_sql(
+            request.question, model=request.model, history=history
+        )
     except ValueError as exc:
         return jsonrpc.build_response(
             error={"code": -32000, "message": str(exc)}
@@ -278,8 +293,17 @@ async def ask(request: AskRequest):
 async def chart(request: ChartRequest):
     """Generate comparative chart data using two LLM SQL passes."""
     try:
-        base_sql = sql_generator.generate_sql(request.question, model=request.model)
-        chart_sql = sql_generator.generate_chart_sql(request.question, model=request.model)
+        history = (
+            context_manager.get_history(request.user_id)
+            if request.user_id
+            else []
+        )
+        base_sql = sql_generator.generate_sql(
+            request.question, model=request.model, history=history
+        )
+        chart_sql = sql_generator.generate_chart_sql(
+            request.question, model=request.model, history=history
+        )
     except ValueError as exc:
         return jsonrpc.build_response(
             error={"code": -32000, "message": str(exc)}
