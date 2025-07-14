@@ -11,6 +11,12 @@ import prompt_templates
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
 
 
+def _llm_enabled() -> bool:
+    """Return True if SQL generation via LLM is enabled."""
+    flag = os.getenv("ENABLE_LLM_SQL", "true").lower()
+    return flag not in {"0", "false", "no"}
+
+
 
 SQL_START = re.compile(r"^(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|WITH)\b", re.IGNORECASE)
 
@@ -39,6 +45,8 @@ def generate_sql(
     history: list | None = None,
 ) -> str:
     """Generate an SQL query from a natural language question using an LLM."""
+    if not _llm_enabled():
+        raise RuntimeError("LLM SQL generation is disabled")
     if model is None:
         model = model_router.ModelRouter().route(task_type="sql")
 
@@ -100,6 +108,8 @@ def generate_chart_sql(
     history: list | None = None,
 ) -> str:
     """Generate an SQL query for chart comparison using an LLM."""
+    if not _llm_enabled():
+        raise RuntimeError("LLM SQL generation is disabled")
     if model is None:
         model = model_router.ModelRouter().route(task_type="sql")
 

@@ -19,6 +19,10 @@ Docker Compose, the `OLLAMA_URL` environment variable is set so the backend
 calls the `ollama` container instead. The backend disables streaming when
 requesting a response from Ollama so a complete JSON payload is returned.
 
+Set `ENABLE_LLM_SQL=true` in the backend environment (enabled by default) to
+allow the API to call the language model for SQL generation. Set it to `false`
+if you want to disable this feature.
+
 Query summaries and fallback answers are produced using the same LLM to
 provide human-friendly explanations when possible.
 
