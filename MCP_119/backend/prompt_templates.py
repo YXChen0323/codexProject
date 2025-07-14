@@ -3,21 +3,21 @@
 from typing import Dict
 
 SQL_TEMPLATE = (
-    "-- \u76ee\u6a19\u8cc7\u6599\u8868\uff1aemergence.emergency_calls\n"
-    "-- \u53ef\u4f7f\u7528\u7684\u6b04\u4f4d\uff1a{columns}\n"
-    "-- \u53c3\u8003\u8cc7\u6599\uff1a{reference_info}\n"
-    "-- \u65e2\u5f80\u751f\u6210\u7d00\u9304\uff1a{history}\n"
-    "-- \u4f7f\u7528\u8005\u554f\u984c\uff1a{query}\n"
-    "\u8acb\u6839\u64da\u4e0a\u8ff0\u8cc7\u8a0a\u8f38\u51fa\u5b8c\u6574 SQL \u8a9e\u53e5\uff0c\u50c5\u56de\u50b3 SQL\u3002"
+    "-- 目標資料表：emergence.emergency_calls\n"
+    "-- 可使用的欄位：{columns}\n"
+    "-- 參考資料：{reference_info}\n"
+    "-- 既往生成紀錄：{history}\n"
+    "-- 使用者問題：{query}\n"
+    "請根據上述資訊輸出完整 SQL 語句，僅回傳 SQL。"
 )
 
 CHART_TEMPLATE = (
-    "-- \u76ee\u6a19\u8cc7\u6599\u8868\uff1aemergence.emergency_calls\n"
-    "-- \u53ef\u4f7f\u7528\u7684\u6b04\u4f4d\uff1a{columns}\n"
-    "-- \u53c3\u8003\u8cc7\u6599\uff1a{reference_info}\n"
-    "-- \u65e2\u5f80\u751f\u6210\u7d00\u9304\uff1a{history}\n"
-    "-- \u4f7f\u7528\u8005\u554f\u984c\uff1a{query}\n"
-    "\u8acb\u6839\u64da\u4e0a\u8ff0\u8cc7\u8a0a\u8f38\u51fa\u53ef\u63a1\u7528\u65bc\u5716\u8868\u6bd4\u8f03\u7684 SQL \u8a9e\u53e5\uff0c\u50c5\u56de\u50b3 SQL\u3002"
+    "-- 目標資料表：emergence.emergency_calls\n"
+    "-- 可使用的欄位：{columns}\n"
+    "-- 參考資料：{reference_info}\n"
+    "-- 既往生成紀錄：{history}\n"
+    "-- 使用者問題：{query}\n"
+    "請根據上述資訊輸出可採用於圖表比較的 SQL 語句，僅回傳 SQL。"
 )
 
 # Nested mapping of model name to task to prompt template
