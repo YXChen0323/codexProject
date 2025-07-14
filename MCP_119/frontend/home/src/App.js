@@ -291,7 +291,11 @@ function App() {
             <MapView data={result || []} geojson={geojson} />
           ) : null}
 
-          <FinalResponse answer={answer} summary={summary} />
+          <FinalResponse
+            answer={answer}
+            summary={summary}
+            showFallback={Array.isArray(result) && result.length === 0}
+          />
         </div>
 
         <HistorySidebar history={history} clearHistory={clearHistory} openHistory={openHistory} />
