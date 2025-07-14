@@ -6,8 +6,10 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: mydb
+    networks:
+      - mcp911-network
     volumes:
-      - D:/Project/volumes/postgis_data:/var/lib/postgresql/data
+      - D:/Project/volumes/postgis_data:/var/lib/postgis/data
     ports:
       - "5432:5432"
 
@@ -19,6 +21,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: 123456
     volumes:
       - D:/Project/volumes/pgadmin_data:/var/lib/pgadmin
+    networks:
+      - mcp911-network
     ports:
       - "5050:80"
     depends_on:
@@ -27,10 +31,13 @@ services:
   ollama:
     image: ollama/ollama
     container_name: ollama
+    networks:
+      - mcp911-network
     ports:
       - "11434:11434"
     volumes:
       - D:/Project/volumes/ollama_data:/root/.ollama
+    tty: true
 
   backend:
     build:
@@ -43,6 +50,8 @@ services:
       DB_USER: user
       DB_PASSWORD: 123456
       OLLAMA_URL: http://ollama:11434/api/generate
+    networks:
+      - mcp911-network
     ports:
       - "8000:8000"
     depends_on:
@@ -55,6 +64,8 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - ./frontend/home/build:/usr/share/nginx/html:ro
+    networks:
+      - mcp911-network
     ports:
       - "80:80"
     depends_on:
@@ -64,3 +75,9 @@ volumes:
   ollama_data:
   pgadmin_data:
   postgis_data:
+
+networks:
+  mcp911-network:
+    name: mcp911-network
+    external: true
+    driver: bridge
