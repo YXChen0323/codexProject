@@ -17,8 +17,9 @@ def _llm_enabled() -> bool:
     return flag not in {"0", "false", "no"}
 
 
-
-SQL_START = re.compile(r"^(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|WITH)\b", re.IGNORECASE)
+SQL_START = re.compile(
+    r"^(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|WITH)\b", re.IGNORECASE
+)
 
 
 def _is_valid_sql(sql: str) -> bool:
@@ -52,12 +53,14 @@ def generate_sql(
 
     columns = database.get_table_columns("emergency_calls", schema="emergence")
     columns_text = ", ".join(columns)
+    reference_info = database.describe_schema()
     prompt = prompt_templates.build_prompt_with_history(
         model,
         "sql",
         question,
         history or [],
         columns=columns_text,
+        reference_info=reference_info,
     )
 
     req = urlrequest.Request(
@@ -112,12 +115,14 @@ def generate_chart_sql(
 
     columns = database.get_table_columns("emergency_calls", schema="emergence")
     columns_text = ", ".join(columns)
+    reference_info = database.describe_schema()
     prompt = prompt_templates.build_prompt_with_history(
         model,
         "chart",
         question,
         history or [],
         columns=columns_text,
+        reference_info=reference_info,
     )
 
     req = urlrequest.Request(
@@ -153,5 +158,3 @@ def generate_chart_sql(
     if not _is_valid_sql(sql):
         raise ValueError(f"Generated text is not valid SQL: {sql}")
     return sql
-
-
