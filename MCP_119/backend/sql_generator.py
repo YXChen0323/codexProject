@@ -3,9 +3,9 @@ import os
 import re
 from urllib import request as urlrequest
 
-import database
 import model_router
 import prompt_templates
+import database
 
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
@@ -50,8 +50,6 @@ def generate_sql(
     if model is None:
         model = model_router.ModelRouter().route(task_type="sql")
 
-    samples = database.get_random_rows("emergency_calls", limit=3, schema="emergence")
-    sample_text = "\n".join(str(row) for row in samples)
     columns = database.get_table_columns("emergency_calls", schema="emergence")
     columns_text = ", ".join(columns)
     prompt = prompt_templates.build_prompt_with_history(
@@ -59,7 +57,6 @@ def generate_sql(
         "sql",
         question,
         history or [],
-        samples=sample_text,
         columns=columns_text,
     )
 
@@ -113,8 +110,6 @@ def generate_chart_sql(
     if model is None:
         model = model_router.ModelRouter().route(task_type="sql")
 
-    samples = database.get_random_rows("emergency_calls", limit=3, schema="emergence")
-    sample_text = "\n".join(str(row) for row in samples)
     columns = database.get_table_columns("emergency_calls", schema="emergence")
     columns_text = ", ".join(columns)
     prompt = prompt_templates.build_prompt_with_history(
@@ -122,7 +117,6 @@ def generate_chart_sql(
         "chart",
         question,
         history or [],
-        samples=sample_text,
         columns=columns_text,
     )
 

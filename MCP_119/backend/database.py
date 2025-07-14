@@ -56,19 +56,6 @@ def describe_schema() -> str:
     )
 
 
-def get_random_rows(table: str, limit: int = 3, *, schema: str | None = None) -> list[dict]:
-    """Return ``limit`` random rows from the specified table."""
-    conn = _get_connection()
-    try:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            tbl = f"{schema}.{table}" if schema else table
-            query = f"SELECT * FROM {tbl} ORDER BY RANDOM() LIMIT {limit}"
-            cur.execute(query)
-            rows = cur.fetchall()
-            return [dict(row) for row in rows]
-    finally:
-        conn.close()
-
 
 def get_table_columns(table: str, *, schema: str | None = None) -> list[str]:
     """Return a list of column names for the specified table."""
