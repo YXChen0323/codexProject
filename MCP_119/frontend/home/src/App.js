@@ -233,22 +233,21 @@ function App() {
             </div>
           )}
 
-          {sql && (
-            <div className="space-y-2">
-              <textarea
-                value={sql}
-                onChange={(e) => setSql(e.target.value)}
-                className="w-full border rounded p-2 h-40 font-mono"
-              />
-              <button
-                onClick={handleSqlExecute}
-                disabled={loading}
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-              >
-                {loading ? <Loader /> : '執行 SQL'}
-              </button>
-            </div>
-          )}
+          <div className="space-y-2">
+            <textarea
+              value={sql}
+              onChange={(e) => setSql(e.target.value)}
+              placeholder="SQL"
+              className="w-full border rounded p-2 h-40 font-mono"
+            />
+            <button
+              onClick={handleSqlExecute}
+              disabled={loading || !sql.trim()}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+            >
+              {loading ? <Loader /> : '執行 SQL'}
+            </button>
+          </div>
 
           {loading && (
             <div className="flex items-center gap-2 text-blue-500">
