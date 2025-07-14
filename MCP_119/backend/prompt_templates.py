@@ -7,15 +7,13 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query for the following question based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
     },
@@ -23,15 +21,13 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query for the following question based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
@@ -43,15 +39,13 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query for the following question based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
@@ -63,15 +57,13 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query for the following question based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
     },
@@ -79,15 +71,13 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query for the following question based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query for the following question based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "chart": (
             "The table to query is `emergency_calls` in the `emergence` schema.\n"
             "Use only these columns exactly as provided: {columns}.\n"
-            "Here are 3 randomly sampled records for reference:\n{samples}\n"
-            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names, provided examples and any prior conversation history: {query}\n"
+            "Write an SQL query that lists multiple related data points for comparison in a chart based solely on the column names and any prior conversation history: {query}\n"
             "Respond only with a valid SQL statement. Do not include any explanations or extra text."
         ),
         "nlp": (
