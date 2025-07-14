@@ -1,13 +1,13 @@
 services:
-  postgres:
+  postgis:
     image: postgis/postgis:15-3.4
-    container_name: postgres
+    container_name: postgis
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: mydb
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - D:/Project/volumes/postgis_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
@@ -18,11 +18,11 @@ services:
       PGADMIN_DEFAULT_EMAIL: yxchen0323@gmail.com
       PGADMIN_DEFAULT_PASSWORD: 123456
     volumes:
-      - ./valumes/pgadmin_data:/var/lib/pgadmin
+      - D:/Project/volumes/pgadmin_data:/var/lib/pgadmin
     ports:
       - "5050:80"
     depends_on:
-      - postgres
+      - postgis
 
   ollama:
     image: ollama/ollama
@@ -30,20 +30,14 @@ services:
     ports:
       - "11434:11434"
     volumes:
-      - ./valumes/ollama_data:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: [gpu]
+      - D:/Project/volumes/ollama_data:/root/.ollama
 
-  fastapi:
+  backend:
     build:
       context: ./backend
-    container_name: fastapi
+    container_name: backend
     environment:
-      DB_HOST: postgres
+      DB_HOST: postgis
       DB_PORT: 5432
       DB_NAME: mydb
       DB_USER: user
@@ -52,7 +46,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
+      - postgis
       - ollama
 
   nginx:
@@ -64,12 +58,9 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - fastapi
+      - backend
 
 volumes:
-  postgres_data:
   ollama_data:
   pgadmin_data:
-
-environment:
-  - NVIDIA_VISIBLE_DEVICES=all
+  postgis_data:
