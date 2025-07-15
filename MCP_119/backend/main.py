@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket
 from pydantic import BaseModel
-from utils import summarize_results, results_to_geojson
+from utils import summarize_results
 import json
 from fastapi.middleware.cors import CORSMiddleware
 import jsonrpc
@@ -177,7 +177,7 @@ async def get_summary(user_id: str):
 @app.post("/sql")
 @app.post("/api/sql")
 async def generate_sql(request: SQLRequest):
-    """Generate an SQL query (including PostGIS syntax) using an LLM."""
+    """Generate an SQL query using an LLM."""
     try:
         history = (
             context_manager.get_history(request.user_id)
@@ -211,7 +211,6 @@ async def execute_sql(request: SQLExecuteRequest):
     if request.user_id:
         context_manager.record(request.user_id, request.query, json.dumps(results))
     summary = summarize_results(results)
-    geojson = results_to_geojson(results)
     # Always try to provide a natural language explanation of the results
     prompt_question = (
         request.question or "Summarize these query results in a friendly way."
@@ -230,7 +229,6 @@ async def execute_sql(request: SQLExecuteRequest):
         "sql": request.query,
         "summary": summary,
         "answer": answer,
-        "geojson": geojson,
     })
 
 
@@ -267,7 +265,6 @@ async def ask(request: AskRequest):
         context_manager.record(request.user_id, sql, json.dumps(results))
 
     summary = summarize_results(results)
-    geojson = results_to_geojson(results)
     answer = ""
     try:
         answer = answer_generator.generate_answer(
@@ -284,7 +281,6 @@ async def ask(request: AskRequest):
         "sql": sql,
         "summary": summary,
         "answer": answer,
-        "geojson": geojson,
     })
 
 
@@ -324,8 +320,6 @@ async def chart(request: ChartRequest):
         context_manager.record(request.user_id, chart_sql, json.dumps(results))
 
     summary = summarize_results(results)
-
-    geojson = results_to_geojson(results)
     answer = ""
     try:
         answer = answer_generator.generate_answer(
@@ -343,5 +337,4 @@ async def chart(request: ChartRequest):
         "base_sql": base_sql,
         "summary": summary,
         "answer": answer,
-        "geojson": geojson,
     })
