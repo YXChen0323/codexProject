@@ -2,14 +2,11 @@ import json
 import os
 import re
 from urllib import request as urlrequest
-
 import model_router
 import prompt_templates
 import database
 
-
-OLLAMA_URL = os.getenv("OLLAMA_URL", " http://host.docker.internal:11434/api/generate")
-
+OLLAMA_URL = os.getenv("OLLAMA_URL", " http://192.168.0.233:11434/api/generate")
 
 def _llm_enabled() -> bool:
     """Return True if SQL generation via LLM is enabled."""

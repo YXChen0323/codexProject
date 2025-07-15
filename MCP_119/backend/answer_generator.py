@@ -1,11 +1,9 @@
 import json
 import os
 from urllib import request as urlrequest
-
 import prompt_templates
 
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://host.docker.internal:11434/api/generate")
-
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://192.168.0.233:11434/api/generate")
 
 def generate_answer(question: str, results: list[dict], *, model: str = "llama3.2:3b") -> str:
     """Generate a friendly natural language answer using an LLM."""
