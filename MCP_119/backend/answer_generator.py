@@ -4,7 +4,7 @@ from urllib import request as urlrequest
 from dotenv import load_dotenv
 import prompt_templates
 
-load_dotenv(dotenv_path="D:\Project\codexProject\MCP_119\.env")
+load_dotenv(dotenv_path="../.env")
 
 # OLLAMA_URL = os.getenv("OLLAMA_URL", "http://192.168.0.233:11434/api/generate")
 OLLAMA_URL = os.getenv("OLLAMA_URL")
