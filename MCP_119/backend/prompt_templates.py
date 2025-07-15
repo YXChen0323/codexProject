@@ -3,7 +3,7 @@
 from typing import Dict
 
 SQL_TEMPLATE = (
-    "-- 目標資料表：emergence.emergency_calls\n"
+    "-- 目標資料表：postgres.emergence.emergency_calls\n"
     "-- 可使用的欄位：{columns}\n"
     "-- 參考資料：{reference_info}\n"
     "-- 既往生成紀錄：{history}\n"
@@ -12,12 +12,12 @@ SQL_TEMPLATE = (
 )
 
 CHART_TEMPLATE = (
-    "-- 目標資料表：emergence.emergency_calls\n"
+    "-- 目標資料表：postgres.emergence.emergency_calls\n"
     "-- 可使用的欄位：{columns}\n"
     "-- 參考資料：{reference_info}\n"
     "-- 既往生成紀錄：{history}\n"
     "-- 使用者問題：{query}\n"
-    "請根據上述資訊輸出可採用於圖表比較的 SQL 語句，僅回傳 SQL。"
+    "請根據上述資訊輸出可採用於圖表比較的 SQL 語句，擷取相同欄位的其他筆資料作為比較對象，僅回傳 SQL。"
 )
 
 # Nested mapping of model name to task to prompt template

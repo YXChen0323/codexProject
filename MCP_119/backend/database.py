@@ -13,7 +13,7 @@ def _get_connection():
     return psycopg2.connect(
         host=os.getenv("DB_HOST", "localhost"),
         port=int(os.getenv("DB_PORT", "5432")),
-        dbname=os.getenv("DB_NAME", "mydb"),
+        dbname=os.getenv("DB_NAME", "postgres"),
         user=os.getenv("DB_USER", "user"),
         password=os.getenv("DB_PASSWORD", "123456"),
     )
@@ -40,7 +40,7 @@ def describe_schema() -> str:
                 """
                 SELECT table_name, column_name
                 FROM information_schema.columns
-                WHERE table_schema = 'public'
+                WHERE table_schema = 'postgres'
                 ORDER BY table_name, ordinal_position
                 """
             )
@@ -62,7 +62,7 @@ def get_table_columns(table: str, *, schema: str | None = None) -> list[str]:
     conn = _get_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            schema_clause = f"table_schema = '{schema}'" if schema else "table_schema = 'public'"
+            schema_clause = f"table_schema = '{schema}'" if schema else "table_schema = 'postgres'"
             query = (
                 "SELECT column_name FROM information_schema.columns "
                 f"WHERE {schema_clause} AND table_name = '{table}' ORDER BY ordinal_position"

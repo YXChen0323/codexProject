@@ -38,7 +38,9 @@ services:
     volumes:
       - D:/Project/volumes/ollama_data:/root/.ollama
     tty: true
-
+    devices:
+      - /dev/kvm:/dev/kvm
+      
   backend:
     build:
       context: ./backend
@@ -46,7 +48,7 @@ services:
     environment:
       DB_HOST: postgis
       DB_PORT: 5432
-      DB_NAME: mydb
+      DB_NAME: postgres
       DB_USER: user
       DB_PASSWORD: 123456
       OLLAMA_URL: http://ollama:11434/api/generate
