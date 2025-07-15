@@ -52,6 +52,10 @@ executing it. Enable the checkbox if you want chart data returned and
 visualised as a bar chart when possible.
 ```
 
+You can also click the **Map** button after a query to view the results on
+an interactive map powered by Leaflet. Any GeoJSON returned by the API or
+rows with latitude and longitude coordinates will be displayed.
+
 
 Stop the stack:
 
