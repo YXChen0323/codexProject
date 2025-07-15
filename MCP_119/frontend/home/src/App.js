@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Loader from './Loader';
-import MapView from './MapView';
 import HistorySidebar from './HistorySidebar';
 import ChartView from './ChartView';
 import FinalResponse from './FinalResponse';
@@ -19,9 +18,7 @@ function App() {
   const [error, setError] = useState(null);
   const [models, setModels] = useState([]);
   const [model, setModel] = useState('');
-  const [geojson, setGeojson] = useState(null);
   const [useChart, setUseChart] = useState(false);
-  const [showMap, setShowMap] = useState(false);
   const [history, setHistory] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('history')) || [];
@@ -87,14 +84,11 @@ function App() {
     const summaryText = data.result?.summary || data.summary || '';
     const answerText = data.result?.answer || data.answer || '';
     const sqlText = data.result?.sql || querySql;
-    const geo = data.result?.geojson || data.geojson || null;
 
     setResult(results);
     setSummary(summaryText);
     setAnswer(answerText);
     setSql(sqlText);
-    setGeojson(geo);
-
     addHistory(questionParam, summaryText, answerText, sqlText, results, model);
   };
 
@@ -110,7 +104,6 @@ function App() {
     setSql('');
     setSummary('');
     setAnswer('');
-    setGeojson(null);
     try {
       if (useChart) {
         const resp = await fetch('/api/chart', {
@@ -125,13 +118,11 @@ function App() {
         const results = data.result?.results || data.results || [];
         const summaryText = data.result?.summary || data.summary || '';
         const answerText = data.result?.answer || data.answer || '';
-        const geo = data.result?.geojson || data.geojson || null;
 
         setSql(generatedSql);
         setResult(results);
         setSummary(summaryText);
         setAnswer(answerText);
-        setGeojson(geo);
 
         addHistory(query, summaryText, answerText, generatedSql, results, model);
       } else {
@@ -161,7 +152,6 @@ function App() {
     setResult(null);
     setSummary('');
     setAnswer('');
-    setGeojson(null);
     try {
       await executeSql(sql, query);
     } catch (err) {
@@ -177,7 +167,6 @@ function App() {
     setResult(item.result || null);
     setSummary(item.summary || '');
     setAnswer(item.answer || '');
-    setGeojson(null);
     if (item.model) {
       setModel(item.model);
     }
@@ -287,19 +276,6 @@ function App() {
             <ChartView result={result} />
           )}
 
-          {((Array.isArray(result) && result.length > 0) || geojson) && (
-            <>
-              <button
-                onClick={() => setShowMap((prev) => !prev)}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-              >
-                {showMap ? '隱藏地圖' : 'Map'}
-              </button>
-              {showMap && (
-                <MapView data={result || []} geojson={geojson} />
-              )}
-            </>
-          )}
 
           <FinalResponse
             answer={answer}
