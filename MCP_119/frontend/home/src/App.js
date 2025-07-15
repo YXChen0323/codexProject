@@ -21,6 +21,7 @@ function App() {
   const [model, setModel] = useState('');
   const [geojson, setGeojson] = useState(null);
   const [useChart, setUseChart] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [history, setHistory] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('history')) || [];
@@ -286,9 +287,19 @@ function App() {
             <ChartView result={result} />
           )}
 
-          {(Array.isArray(result) && result.length > 0) || geojson ? (
-            <MapView data={result || []} geojson={geojson} />
-          ) : null}
+          {((Array.isArray(result) && result.length > 0) || geojson) && (
+            <>
+              <button
+                onClick={() => setShowMap((prev) => !prev)}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              >
+                {showMap ? '隱藏地圖' : 'Map'}
+              </button>
+              {showMap && (
+                <MapView data={result || []} geojson={geojson} />
+              )}
+            </>
+          )}
 
           <FinalResponse
             answer={answer}
