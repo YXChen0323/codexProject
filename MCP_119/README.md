@@ -1,35 +1,27 @@
 # MCP_119
 
-`docker-compose.yaml` orchestrates a development stack that combines a PostGIS
-database, a FastAPI backend and a React frontend with language‑model support.
-pgAdmin is included for administration and Nginx serves the UI.
+`docker-compose.yaml` 用來協調開發環境，包含 PostGIS 資料庫、FastAPI 後端以及支援語言模型的 React 前端。也整合 pgAdmin 方便管理，並由 Nginx 提供 UI。
 
-## Services
+## 服務
 
 - **Ollama** — `ollama/ollama`
 - **pgAdmin** — `dpage/pgadmin4`
-- **PostgreSQL** with PostGIS — `postgis/postgis:15-3.4`
-- **FastAPI** backend (JSON‑RPC)
-- **Nginx** reverse proxy exposing `/api/`
+- **PostgreSQL** 搭配 PostGIS — `postgis/postgis:15-3.4`
+- **FastAPI** 後端（JSON-RPC）
+- **Nginx** 反向代理，對外暴露 `/api/`
 
-Backend containers use the environment variables defined in
-`docker-compose.yaml` to connect to PostgreSQL and reach the Ollama service.
-Adjust them if you require custom credentials or endpoints. Set
-`ENABLE_LLM_SQL=true` (default) to allow SQL generation by the language model or
-disable it to skip that step. Query summaries and fallback answers are produced
-by the same LLM.
+後端容器使用 `docker-compose.yaml` 中設定的環境變數以連線 PostgreSQL 並取得 Ollama 服務。若需自訂帳號或端點，可調整該設定。設定 `ENABLE_LLM_SQL=true`（預設）即可讓語言模型產生 SQL；如不需要，可將其關閉。查詢摘要與備援回答亦由同一模型產生。
 
-The Ollama container runs with GPU acceleration (`NVIDIA_VISIBLE_DEVICES=all`).
-Verify GPU access with:
+Ollama 容器使用 GPU 加速執行（`NVIDIA_VISIBLE_DEVICES=all`）。可以以下指令確認 GPU 是否可用：
 
 ```bash
 docker compose exec ollama nvidia-smi
 ```
 
-## Setup
+## 安裝步驟
 
-### Initialize the frontend (first time only)
-Install React and add Tailwind CSS dependencies:
+### 首次初始化前端
+安裝 React 並加入 Tailwind CSS 相關套件：
 
 ```bash
 npx create-react-app home
@@ -41,29 +33,28 @@ npm install -D daisyui
 npm install recharts
 ```
 
-### Build the React app
-Before starting the stack, build the React application so Nginx can serve the
-static files:
+### 建立 React 應用
+在啟動整個開發環境前，先建立 React 應用，讓 Nginx 能供應靜態檔案：
 
 ```bash
 (cd frontend/home && npm install && npm run build)
 ```
 
-Start all services with:
+ 接著啟動所有服務：
 
 ```bash
 docker compose up -d
 ```
 
-Stop the containers using:
+ 若要停止容器，可執行：
 
 ```bash
 docker compose down
 ```
 
-## Prepare the database
+## 準備資料庫
 
-Copy the example CSV file into the PostGIS container and load it:
+將範例 CSV 檔從本機複製至 PostGIS 容器並匯入：
 
 ```bash
 docker cp Fire_Department_and_Emergency_Medical_Services_Dispatched_Calls_for_Service_20250512.csv postgis:/home
@@ -115,14 +106,10 @@ CREATE TABLE emergence.emergency_calls (
 COPY emergence.emergency_calls FROM '/home/Fire_Department_and_Emergency_Medical_Services_Dispatched_Calls_for_Service_20250512.csv' WITH (FORMAT csv, HEADER true);
 ```
 
-## UI features
+## 介面功能
 
-The frontend includes a chart view powered by `chart.js` and `react-chartjs-2`.
-A checkbox lets you choose whether to generate and display a bar chart.
+前端內建由 `chart.js` 與 `react-chartjs-2` 驅動的圖表檢視，可通過勾選框決定是否產生並顯示長條圖。
 
-## Natural language answers
+## 自然語言回覆
 
-Queries sent to `/sql/execute` trigger the `nlp` prompt template so the LLM can
-produce a human-friendly explanation of the results. When no question is
-provided, a short summary is generated instead. Answers no longer force a
-follow-up question, resulting in more natural responses.
+當透過 `/sql/execute` 送出查詢時，將啟用 `nlp` 提示模板，使語言模型產生容易讀懂的結果說明。如果沒有提供問題，將產生簡短摘要。回答不再強制包含後續問題，使回覆更加自然。
