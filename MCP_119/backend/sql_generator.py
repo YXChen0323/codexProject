@@ -8,7 +8,7 @@ import prompt_templates
 import database
 
 
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://host.docker.internal:11434/api/generate")
+OLLAMA_URL = os.getenv("OLLAMA_URL", " http://host.docker.internal:11434/api/generate")
 
 
 def _llm_enabled() -> bool:
