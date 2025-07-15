@@ -2,11 +2,14 @@ import json
 import os
 import re
 from urllib import request as urlrequest
+from dotenv import load_dotenv
 import model_router
 import prompt_templates
 import database
 
-OLLAMA_URL = os.getenv("OLLAMA_URL", " http://192.168.0.233:11434/api/generate")
+load_dotenv(dotenv_path="D:\Project\codexProject\MCP_119\.env")
+# OLLAMA_URL = os.getenv("OLLAMA_URL", "http://192.168.0.233:11434/api/generate")
+OLLAMA_URL = os.getenv("OLLAMA_URL")
 
 def _llm_enabled() -> bool:
     """Return True if SQL generation via LLM is enabled."""

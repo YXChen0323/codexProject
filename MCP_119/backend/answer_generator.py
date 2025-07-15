@@ -1,9 +1,13 @@
 import json
 import os
 from urllib import request as urlrequest
+from dotenv import load_dotenv
 import prompt_templates
 
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://192.168.0.233:11434/api/generate")
+load_dotenv(dotenv_path="D:\Project\codexProject\MCP_119\.env")
+
+# OLLAMA_URL = os.getenv("OLLAMA_URL", "http://192.168.0.233:11434/api/generate")
+OLLAMA_URL = os.getenv("OLLAMA_URL")
 
 def generate_answer(question: str, results: list[dict], *, model: str = "llama3.2:3b") -> str:
     """Generate a friendly natural language answer using an LLM."""
