@@ -50,9 +50,7 @@ docker compose down
 ## UI features
 
 The frontend includes a chart view powered by `chart.js` and `react-chartjs-2`.
-A checkbox lets you choose whether to generate and display a bar chart. You can
-also click **Map** after a query to plot any returned GeoJSON or latitude and
-longitude columns on an interactive Leaflet map.
+A checkbox lets you choose whether to generate and display a bar chart.
 
 ## Natural language answers
 
