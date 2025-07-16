@@ -210,6 +210,13 @@ async def execute_sql(request: SQLExecuteRequest):
         )
     if request.user_id:
         context_manager.record(request.user_id, request.query, json.dumps(results))
+    reference = (
+        context_manager.get_first_results(request.user_id)
+        if request.user_id
+        else None
+    )
+    if reference is None:
+        reference = results
     summary = summarize_results(results)
     # Always try to provide a natural language explanation of the results
     prompt_question = (
@@ -218,7 +225,7 @@ async def execute_sql(request: SQLExecuteRequest):
     try:
         answer = answer_generator.generate_answer(
             prompt_question,
-            results,
+            reference,
             model=request.model or "llama3.2:3b",
         )
     except Exception:  # pragma: no cover - depends on environment
@@ -263,13 +270,20 @@ async def ask(request: AskRequest):
 
     if request.user_id:
         context_manager.record(request.user_id, sql, json.dumps(results))
+    reference = (
+        context_manager.get_first_results(request.user_id)
+        if request.user_id
+        else None
+    )
+    if reference is None:
+        reference = results
 
     summary = summarize_results(results)
     answer = ""
     try:
         answer = answer_generator.generate_answer(
             request.question,
-            results,
+            reference,
             model=request.model or "llama3.2:3b",
         )
     except Exception:  # pragma: no cover - depends on environment
@@ -318,13 +332,20 @@ async def chart(request: ChartRequest):
 
     if request.user_id:
         context_manager.record(request.user_id, chart_sql, json.dumps(results))
+    reference = (
+        context_manager.get_first_results(request.user_id)
+        if request.user_id
+        else None
+    )
+    if reference is None:
+        reference = results
 
     summary = summarize_results(results)
     answer = ""
     try:
         answer = answer_generator.generate_answer(
             request.question,
-            results,
+            reference,
             model=request.model or "llama3.2:3b",
         )
     except Exception:  # pragma: no cover - depends on environment

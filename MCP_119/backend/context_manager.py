@@ -5,6 +5,7 @@ from datetime import datetime
 from textwrap import shorten
 from typing import List
 import sqlite3
+import json
 
 
 @dataclass
@@ -59,6 +60,20 @@ class ConversationContext:
             Message(row["role"], row["content"], datetime.fromisoformat(row["timestamp"]))
             for row in rows
         ]
+
+    def get_first_results(self, user_id: str) -> list | None:
+        """Return the results from the first assistant message for a user."""
+        cur = self._conn.execute(
+            "SELECT content FROM messages WHERE user_id=? AND role='assistant' ORDER BY id LIMIT 1",
+            (user_id,),
+        )
+        row = cur.fetchone()
+        if not row:
+            return None
+        try:
+            return json.loads(row["content"])
+        except Exception:
+            return None
 
     def summarize(self, user_id: str, max_chars: int = 200) -> str:
         """Return a simple summary of the conversation history."""
