@@ -8,7 +8,7 @@ SQL_TEMPLATE = (
     "-- 參考資料：{reference_info}\n"
     "-- 既往生成紀錄：{history}\n"
     "-- 使用者問題：{query}\n"
-    "請根據上述資訊輸出完整 SQL 語句，僅回傳 SQL。"
+    "請根據上述資訊輸出完整 SQL 語句，以回答使用者提問為目標，僅回傳 SQL。"
 )
 
 CHART_TEMPLATE = (
@@ -27,16 +27,16 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": SQL_TEMPLATE,
         "chart": CHART_TEMPLATE,
         "nlp": (
-            "Given the SQL query results:\n{results}\n"
-            "請以友善且樂於助人的方式回答問題：{query}。請自行解讀結果的意義，勿表示意義不明。"
+            "請以友善且樂於助人的方式回答問題：{query}，並且參照查詢結果:{results}。請自行解讀結果的意義，勿表示意義不明。"
+            "以繁體中文回覆。"
         ),
     },
     "qwen2.5-coder:3b": {
         "sql": SQL_TEMPLATE,
         "chart": CHART_TEMPLATE,
         "nlp": (
-            "Given the SQL query results:\n{results}\n"
-            "請以友善且樂於助人的方式回答問題：{query}。請自行解讀結果的意義，勿表示意義不明。"
+            "請以友善且樂於助人的方式回答問題：{query}，並且參照查詢結果:{results}。請自行解讀結果的意義，勿表示意義不明。"
+            "以繁體中文回覆。"
         ),
     },
     "sqlcoder:7b": {"sql": SQL_TEMPLATE, "chart": CHART_TEMPLATE},
@@ -44,8 +44,8 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "sql": SQL_TEMPLATE,
         "chart": CHART_TEMPLATE,
         "nlp": (
-            "Given the SQL query results:\n{results}\n"
-            "請以友善且樂於助人的方式回答問題：{query}。請自行解讀結果的意義，勿表示意義不明。"
+            "請以友善且樂於助人的方式回答問題：{query}，並且參照查詢結果:{results}。請自行解讀結果的意義，勿表示意義不明。"
+            "以繁體中文回覆。"
         ),
     },
 }
