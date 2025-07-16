@@ -28,7 +28,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "chart": CHART_TEMPLATE,
         "nlp": (
             "Given the SQL query results:\n{results}\n"
-            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
+            "請以友善且樂於助人的方式回答問題：{query}。請自行解讀結果的意義，勿表示意義不明。"
         ),
     },
     "qwen2.5-coder:3b": {
@@ -36,7 +36,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "chart": CHART_TEMPLATE,
         "nlp": (
             "Given the SQL query results:\n{results}\n"
-            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
+            "請以友善且樂於助人的方式回答問題：{query}。請自行解讀結果的意義，勿表示意義不明。"
         ),
     },
     "sqlcoder:7b": {"sql": SQL_TEMPLATE, "chart": CHART_TEMPLATE},
@@ -45,7 +45,7 @@ PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "chart": CHART_TEMPLATE,
         "nlp": (
             "Given the SQL query results:\n{results}\n"
-            "Answer the question: {query} in a friendly and helpful way. Interpret the meaning of the results yourself and do not state that the meaning is unclear."
+            "請以友善且樂於助人的方式回答問題：{query}。請自行解讀結果的意義，勿表示意義不明。"
         ),
     },
 }
