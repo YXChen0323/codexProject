@@ -3,7 +3,7 @@ import './App.css';
 import Loader from './Loader';
 import Dashboard from './Dashboard';
 import MapContainer from './MapContainer';
-import { Trash2 } from 'lucide-react';
+
 
 
 
@@ -13,6 +13,7 @@ function App() {
   const [sql, setSql] = useState('');
   const [summary, setSummary] = useState('');
   const [answer, setAnswer] = useState('');
+  const [dashboardOpen, setDashboardOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [models, setModels] = useState([]);
@@ -222,15 +223,36 @@ function App() {
             </div>
           )}
 
-          <Dashboard
-            result={result}
-            answer={answer}
-            summary={summary}
-            history={history}
-            clearHistory={clearHistory}
-            openHistory={openHistory}
-          />
-          <MapContainer />
+          <button
+            type="button"
+            onClick={() => setDashboardOpen(true)}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          >
+            顯示儀表板
+          </button>
+          {dashboardOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-4 rounded-lg max-w-6xl w-full space-y-4 overflow-auto max-h-[90vh]">
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setDashboardOpen(false)}
+                    className="text-gray-600 hover:text-gray-800"
+                  >
+                    關閉
+                  </button>
+                </div>
+                <Dashboard
+                  result={result}
+                  answer={answer}
+                  summary={summary}
+                  history={history}
+                  clearHistory={clearHistory}
+                  openHistory={openHistory}
+                />
+                <MapContainer />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
