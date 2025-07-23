@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Loader from './Loader';
 import Dashboard from './Dashboard';
+import MapContainer from './MapContainer';
 import { Trash2 } from 'lucide-react';
 
 
@@ -229,6 +230,7 @@ function App() {
             clearHistory={clearHistory}
             openHistory={openHistory}
           />
+          <MapContainer />
         </div>
       </div>
     </div>
