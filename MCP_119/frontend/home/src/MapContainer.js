@@ -4,11 +4,18 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
+import { fromLonLat } from 'ol/proj';
 
 function MapContainer() {
   const mapRef = useRef(null);
 
   useEffect(() => {
+    const usCenter = fromLonLat([-98.5795, 39.8283]);
+    const usExtent = [
+      ...fromLonLat([-125, 24]),
+      ...fromLonLat([-66, 49]),
+    ];
+
     const map = new Map({
       target: mapRef.current,
       layers: [
@@ -17,8 +24,9 @@ function MapContainer() {
         }),
       ],
       view: new View({
-        center: [0, 0],
-        zoom: 2,
+        center: usCenter,
+        zoom: 4,
+        extent: usExtent,
       }),
     });
     return () => {
