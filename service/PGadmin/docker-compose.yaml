@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: postgres
     volumes:
-      - D:/Project/volumes/postgis_data:/var/lib/postgis/data
+      - ./volumes/postgis_data:/var/lib/postgis/data
     ports:
       - "5432:5432"
 
@@ -18,7 +18,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: yxchen0323@gmail.com
       PGADMIN_DEFAULT_PASSWORD: 123456
     volumes:
-      - D:/Project/volumes/pgadmin_data:/var/lib/pgadmin
+      - ./volumes/pgadmin_data:/var/lib/pgadmin
     ports:
       - "5050:80"
     depends_on:
