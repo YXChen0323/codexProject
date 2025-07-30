@@ -9,7 +9,7 @@ services:
     volumes:
       - ./volumes/postgis_data:/var/lib/postgis/data
     ports:
-      - "5432:5432"
+      - "5058:5432"
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -20,7 +20,7 @@ services:
     volumes:
       - ./volumes/pgadmin_data:/var/lib/pgadmin
     ports:
-      - "5050:80"
+      - "5057:80"
     depends_on:
       - postgis
 
