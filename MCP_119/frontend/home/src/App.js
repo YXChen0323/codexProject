@@ -4,6 +4,7 @@ import Loader from './Loader';
 import ChartView from './ChartView';
 import HistorySidebar from './HistorySidebar';
 import MapContainer from './MapContainer';
+import FinalResponse from './FinalResponse';
 
 
 
