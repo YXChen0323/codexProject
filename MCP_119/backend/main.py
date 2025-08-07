@@ -71,12 +71,15 @@ class AskRequest(BaseModel):
     question: str
     model: str | None = None
     user_id: str | None = None
+    use_history: bool = True
 
 
 class ChartRequest(BaseModel):
     question: str
     model: str | None = None
     user_id: str | None = None
+    use_history: bool = True
+
 
 @app.get("/")
 async def root():

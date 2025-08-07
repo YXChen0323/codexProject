@@ -21,6 +21,9 @@ function App() {
   const [models, setModels] = useState([]);
   const [model, setModel] = useState('');
   const [history, setHistory] = useState(() => {
+    return JSON.parse(localStorage.getItem('history')) || [];
+  });
+  const [useHistory, setUseHistory] = useState(true);
     try {
       return JSON.parse(localStorage.getItem('history')) || [];
     } catch {
@@ -71,7 +74,7 @@ function App() {
     const response = await fetch('/api/sql/execute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: querySql, model, question: questionParam })
+      body: JSON.stringify({ query: querySql, model, question: questionParam, use_history: useHistory })
     });
     if (!response.ok) {
       const data = await response.json().catch(() => null);
@@ -109,7 +112,7 @@ function App() {
       const resp = await fetch('/api/chart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: query, model })
+        body: JSON.stringify({ question: query, model, use_history: useHistory })
       });
       if (!resp.ok) throw new Error('Failed to generate chart data');
       const data = await resp.json();
@@ -209,6 +212,14 @@ function App() {
                   placeholder="輸入你的問題"
                   className="border rounded p-2 flex-1"
                 />
+                <label className="flex items-center gap-2 mr-4">
+                  <input
+                    type="checkbox"
+                    checked={useHistory}
+                    onChange={e => setUseHistory(e.target.checked)}
+                  />
+                  參考歷史查詢紀錄
+                </label>
                 <button
                   type="submit"
                   disabled={loading}
