@@ -10,6 +10,7 @@ from context_manager import ConversationContext
 import sql_generator
 import answer_generator
 import database
+from logger import logger
 
 app = FastAPI()
 router = ModelRouter()
@@ -242,6 +243,7 @@ async def execute_sql(request: SQLExecuteRequest):
 @app.post("/ask")
 @app.post("/api/ask")
 async def ask(request: AskRequest):
+    logger.info(f"ASK: user_id={request.user_id}, model={request.model}, question={request.question}")
     """Generate SQL from a question, execute it, and return the results."""
     try:
         history = (
@@ -252,18 +254,23 @@ async def ask(request: AskRequest):
         sql = sql_generator.generate_sql(
             request.question, model=request.model, history=history
         )
+        logger.info(f"ASK SQL generated: {sql}")
     except ValueError as exc:
+        logger.error(f"ASK SQL ValueError: {exc}")
         return jsonrpc.build_response(
             error={"code": -32000, "message": str(exc)}
         )
     except Exception as exc:  # pragma: no cover - depends on environment
+        logger.exception(f"ASK SQL Exception: {exc}")
         return jsonrpc.build_response(
             error={"code": -32000, "message": str(exc)}
         )
 
     try:
         results = database.execute_query(sql)
+        logger.info(f"ASK SQL executed, results_len={len(results)}")
     except Exception as exc:  # pragma: no cover - depends on environment
+        logger.exception(f"ASK DB Exception: {exc}")
         return jsonrpc.build_response(
             error={"code": -32000, "message": str(exc)}
         )
@@ -286,9 +293,12 @@ async def ask(request: AskRequest):
             reference,
             model=request.model or "llama3.2:3b",
         )
-    except Exception:  # pragma: no cover - depends on environment
+        logger.info(f"ASK answer generated, answer_len={len(answer)}")
+    except Exception as exc:  # pragma: no cover - depends on environment
+        logger.exception(f"ASK answer Exception: {exc}")
         answer = ""
 
+    logger.info(f"ASK completed. SQL: {sql}, results_len={len(results)}, answer_len={len(answer)}")
     return jsonrpc.build_response(result={
         "results": results,
         "model": request.model,
