@@ -31,12 +31,21 @@ CODE_FENCE_RE = re.compile(r"^```(?:sql)?\s*(.*?)\s*```$", re.IGNORECASE | re.DO
 
 
 def _clean_sql(sql: str) -> str:
-    """Remove markdown code fences from the generated SQL if present."""
+    """Extract and return only the SQL statement(s), removing markdown code fences and non-SQL explanations/symbols."""
+    import re
     sql = sql.strip()
+    # Remove code fence if present
     match = CODE_FENCE_RE.match(sql)
     if match:
         sql = match.group(1).strip()
-    return sql
+    # Split by line,保留以SQL關鍵字開頭的行到結尾
+    sql_lines = sql.splitlines()
+    sql_start = re.compile(r'^(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|WITH)', re.IGNORECASE)
+    # 找到第一個SQL起始行
+    start_idx = next((i for i, line in enumerate(sql_lines) if sql_start.match(line.strip())), 0)
+    # 從SQL起始行開始組回字串
+    cleaned_sql = '\n'.join(sql_lines[start_idx:]).strip()
+    return cleaned_sql
 
 
 def generate_sql(
