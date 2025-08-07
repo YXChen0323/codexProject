@@ -8,14 +8,9 @@ class ModelRouter:
         # Mapping of task types to model names
         self.task_mapping: Dict[str, str] = {
             # qwen2.5-coder:7b handles user facing responses
-            "nlp": "qwen2.5-coder:7b",
+            "nlp": "gpt-oss:latest",
             # qwen2.5-coder:3b is a lightweight variant for simple NLP tasks
-            "nlp-small": "qwen2.5-coder:3b",
-            # All three models generate SQL queries
-            "code": "phi3:3.8b",
-            "sql": "sqlcoder:7b",
-            # llama3.2:3b is available for general NLP tasks
-            "chat": "llama3.2:3b",
+            "nlp2": "qwen2.5-coder:7b",
         }
         # Optional mapping of user IDs to preferred model names
         self.user_mapping: Dict[str, str] = {}
