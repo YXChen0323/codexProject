@@ -21,15 +21,13 @@ function App() {
   const [models, setModels] = useState([]);
   const [model, setModel] = useState('');
   const [history, setHistory] = useState(() => {
+  try {
     return JSON.parse(localStorage.getItem('history')) || [];
-  });
-  const [useHistory, setUseHistory] = useState(true);
-    try {
-      return JSON.parse(localStorage.getItem('history')) || [];
-    } catch {
-      return [];
-    }
-  });
+  } catch {
+    return [];
+  }
+});
+const [useHistory, setUseHistory] = useState(true);
 
   useEffect(() => {
     localStorage.setItem('history', JSON.stringify(history));
