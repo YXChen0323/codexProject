@@ -12,7 +12,9 @@ OLLAMA_URL = os.getenv("OLLAMA_URL")
 def generate_answer(question: str, results: list[dict], *, model: str = "llama3.2:3b") -> str:
     """Generate a friendly natural language answer using an LLM."""
     template = prompt_templates.load_template(model, "nlp")
-    results_text = json.dumps(results, ensure_ascii=False)
+    # 限制傳給 LLM 的資料量，預設只取前 20 筆
+    limited_results = results[:20] if isinstance(results, list) else results
+    results_text = json.dumps(limited_results, ensure_ascii=False)
     prompt = prompt_templates.fill_template(template, question, results=results_text)
     req = urlrequest.Request(
         OLLAMA_URL,
