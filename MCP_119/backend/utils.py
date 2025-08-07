@@ -14,8 +14,7 @@ def summarize_results(results: list[dict]) -> str:
             "Summarize these query results in one sentence.", results
         )
     except Exception:
-        columns = ", ".join(results[0].keys())
-        return columns
+        return ""
 
 
 def build_fallback_answer(question: str, results: list[dict]) -> str:
@@ -25,7 +24,6 @@ def build_fallback_answer(question: str, results: list[dict]) -> str:
     try:
         return answer_generator.generate_answer(question, results)
     except Exception:
-        columns = ", ".join(results[0].keys())
-        return columns
+        return ""
 
 

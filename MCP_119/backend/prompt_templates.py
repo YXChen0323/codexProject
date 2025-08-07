@@ -3,35 +3,48 @@
 from typing import Dict
 
 SQL_TEMPLATE = (
-    "請根據下述資訊輸出完整 SQL 語句，你的回答只能是 SQL。目標資料表：postgres.emergence.emergency_calls,可使用的欄位：{columns},參考資料：{reference_info},過往生成紀錄：{history}使用者問題：{query}僅限列出前20筆資料，並且以表格形式呈現。"
+    "請根據下列資訊，僅產生最準確且完整的 SQL 查詢語句：\n"
+    "1. 目標資料表：postgres.emergence.emergency_calls\n"
+    "2. 可使用的欄位：{columns}\n"
+    "3. 參考資料：{reference_info}\n"
+    "4. 過往生成紀錄：{history}\n"
+    "5. 使用者問題：{query}\n"
+    "請注意：\n"
+    "- 回答只能且必須是 SQL，不能包含任何解釋或其他內容。\n"
+    "- 僅限列出前 20 筆資料，並以表格形式呈現。"
 )
+
 
 CHART_TEMPLATE = (
-    "-- 目標資料表：postgres.emergence.emergency_calls\n"
-    "-- 可使用的欄位：{columns}\n"
-    "-- 參考資料：{reference_info}\n"
-    "-- 既往生成紀錄：{history}\n"
-    "-- 使用者問題：{query}\n"
-    "請根據上述資訊輸出可採用於圖表比較的 SQL 語句，擷取相同欄位的其他筆資料作為比較對象，僅回傳 SQL。"
+    "請根據下列資訊，僅產生可用於和其他資料對比的圖表 SQL 查詢語句：\n"
+    "1. 目標資料表：postgres.emergence.emergency_calls\n"
+    "2. 可使用的欄位：{columns}\n"
+    "3. 參考資料：{reference_info}\n"
+    "4. 既往生成紀錄：{history}\n"
+    "5. 使用者問題：{query}\n"
+    "請注意：\n"
+    "- 查詢目的是讓使用者能和其他筆資料進行比較，產生對比圖表。\n"
+    "- 回答只能且必須是 SQL，不能包含任何解釋或其他內容。"
 )
 
+
 # Nested mapping of model name to task to prompt template
+NLP_TEMPLATE = (
+    "請以友善且樂於助人的方式回答問題：{query}，並參照查詢結果：{results}。\n"
+    "請自行解讀結果的意義，勿表示意義不明。\n"
+    "以繁體中文回覆。"
+)
+
 PROMPT_TEMPLATES: Dict[str, Dict[str, str]] = {
     "gpt-oss:latest": {
         "sql": SQL_TEMPLATE,
         "chart": CHART_TEMPLATE,
-        "nlp": (
-            "請以友善且樂於助人的方式回答問題：{query}，並且參照查詢結果:{results}。請自行解讀結果的意義，勿表示意義不明。"
-            "以繁體中文回覆。"
-        ),
+        "nlp": NLP_TEMPLATE,
     },
     "qwen2.5-coder:7b": {
         "sql": SQL_TEMPLATE,
         "chart": CHART_TEMPLATE,
-        "nlp": (
-            "請以友善且樂於助人的方式回答問題：{query}，並且參照查詢結果:{results}。請自行解讀結果的意義，勿表示意義不明。"
-            "以繁體中文回覆。"
-        ),
+        "nlp": NLP_TEMPLATE,
     },
 }
 
