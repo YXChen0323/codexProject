@@ -195,7 +195,7 @@ async def generate_sql(request: SQLRequest):
         return jsonrpc.build_response(
             error={"code": -32000, "message": str(exc)}
         )
-    return jsonrpc.build_response(result={"sql": sql})
+    return jsonrpc.build_response(result={"sql": sql_generator._clean_sql(sql)})
 
 
 @app.post("/sql/execute")
@@ -292,7 +292,7 @@ async def ask(request: AskRequest):
     return jsonrpc.build_response(result={
         "results": results,
         "model": request.model,
-        "sql": sql,
+        "sql": sql_generator._clean_sql(sql),
         "summary": summary,
         "answer": answer,
     })
@@ -354,8 +354,8 @@ async def chart(request: ChartRequest):
     return jsonrpc.build_response(result={
         "results": results,
         "model": request.model,
-        "sql": chart_sql,
-        "base_sql": base_sql,
+        "sql": sql_generator._clean_sql(chart_sql),
+        "base_sql": sql_generator._clean_sql(base_sql),
         "summary": summary,
         "answer": answer,
     })
