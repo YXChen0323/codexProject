@@ -5,9 +5,8 @@ import ChartView from './ChartView';
 import HistorySidebar from './HistorySidebar';
 import MapContainer from './MapContainer';
 import FinalResponse from './FinalResponse';
-
-
-
+import ModelSelector from './ModelSelector';
+import QuestionInput from './QuestionInput';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -28,16 +27,32 @@ function App() {
   }
 });
 const [useHistory, setUseHistory] = useState(true);
+  const [hoveredMenu, setHoveredMenu] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('history', JSON.stringify(history));
   }, [history]);
 
+  const deleteHistoryItem = (idx) => {
+    setHistory(history => {
+      const newHistory = history.filter((_, i) => i !== idx);
+      localStorage.setItem('history', JSON.stringify(newHistory));
+      return newHistory;
+    });
+  };
+
   const addHistory = (question, summaryText, answerText, sqlText, resultData, modelName) => {
     setHistory((prev) => [
-      { question, summary: summaryText, answer: answerText, sql: sqlText, result: resultData, model: modelName },
-      ...prev,
-    ]);
+      {
+        question,
+        summary: summaryText,
+        answer: answerText,
+        sql: sqlText,
+        result: Array.isArray(resultData) ? resultData.slice(0, 5) : resultData,
+        model: modelName,
+      },
+      ...prev
+    ].slice(0, 30));
   };
 
   const clearHistory = () => {
@@ -65,8 +80,6 @@ const [useHistory, setUseHistory] = useState(true);
     };
     fetchModels();
   }, []);
-
-
 
   const executeSql = async (querySql, questionParam = query) => {
     const response = await fetch('/api/sql/execute', {
@@ -162,111 +175,63 @@ const [useHistory, setUseHistory] = useState(true);
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      <div className="w-40 bg-gray-100 p-4 space-y-2">
-        <button
-          className={`w-full p-2 rounded ${activeTab === 'query' ? 'bg-blue-500 text-white' : 'bg-white'}`}
-          onClick={() => setActiveTab('query')}
-        >
-          查詢
-        </button>
-        <button
-          className={`w-full p-2 rounded ${activeTab === 'chart' ? 'bg-blue-500 text-white' : 'bg-white'}`}
-          onClick={() => setActiveTab('chart')}
-        >
-          圖表與表格
-        </button>
-        <button
-          className={`w-full p-2 rounded ${activeTab === 'map' ? 'bg-blue-500 text-white' : 'bg-white'}`}
-          onClick={() => setActiveTab('map')}
-        >
-          地圖
-        </button>
+      <div className="w-40 bg-gray-100 p-4 space-y-2 relative">
+        <div onMouseEnter={() => setHoveredMenu('query')} className="relative">
+          <button className={`w-full p-2 rounded ${activeTab === 'query' ? 'bg-blue-500 text-white' : 'bg-white'}`} onClick={() => setActiveTab('query')}>查詢</button>
+        </div>
+        <div onMouseEnter={() => setHoveredMenu('table')} className="relative">
+          <button className={`w-full p-2 rounded ${activeTab === 'table' ? 'bg-blue-500 text-white' : 'bg-white'}`} onClick={() => setActiveTab('table')}>表格</button>
+        </div>
+        <div onMouseEnter={() => setHoveredMenu('chart')} className="relative">
+          <button className={`w-full p-2 rounded ${activeTab === 'chart' ? 'bg-blue-500 text-white' : 'bg-white'}`} onClick={() => setActiveTab('chart')}>圖表</button>
+        </div>
+        <button className={`w-full p-2 rounded ${activeTab === 'map' ? 'bg-blue-500 text-white' : 'bg-white'}`} onClick={() => setActiveTab('map')}>地圖</button>
       </div>
-      <div className="flex-1 p-6">
-        {activeTab === 'query' && (
-          <div className="flex flex-col md:flex-row">
-            <div className="flex-1 bg-white shadow-md rounded-lg p-6 space-y-6">
-              <h1 className="text-2xl font-bold text-center text-blue-600">自然語言 SQL 查詢系統</h1>
 
+      <div className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+        {/* 美化後的 sticky header區塊 */}
+        <div className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-blue-100 rounded-xl shadow-md px-6 pb-4 mb-6">
+          <h1 className="text-3xl font-extrabold text-center text-blue-600 tracking-wide pt-4">自然語言 SQL 查詢系統</h1>
+          <div className="text-center mt-2">
+            <h2 className="text-lg font-semibold text-gray-700">輸入查詢與選擇模型</h2>
+            <p className="text-sm text-gray-500">請選擇模型並輸入你的問題，系統將轉換為 SQL 並顯示查詢結果。</p>
+          </div>
+          <div className="flex flex-wrap md:flex-nowrap gap-2 md:gap-4 items-center justify-center mt-4">
+            <ModelSelector model={model} models={models} setModel={setModel} />
+            <QuestionInput query={query} setQuery={setQuery} loading={loading} />
+            <label className="flex items-center gap-2 mr-4 text-gray-600 bg-gray-100 px-3 py-2 rounded shadow-sm">
+              <input type="checkbox" checked={useHistory} onChange={e => setUseHistory(e.target.checked)} className="accent-blue-500" />
+              參考歷史查詢紀錄
+            </label>
+            <button onClick={handleSubmit} disabled={loading} className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 text-white px-6 py-2 rounded-lg shadow hover:from-blue-600 hover:to-blue-500 transition font-semibold disabled:opacity-60">
+              <span className="material-icons text-base">search</span>
+              {loading ? <Loader /> : '查詢'}
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-row gap-8">
+
+          <div className="flex-1 min-w-0">
+        {activeTab === 'query' && (
+              <div className="bg-white shadow-md rounded-lg p-6 space-y-6">
               <div>
                 <h2 className="text-lg font-semibold text-gray-700">輸入查詢與選擇模型</h2>
                 <p className="text-sm text-gray-500 mb-2">請選擇模型並輸入你的問題，系統將轉換為 SQL 並顯示查詢結果。</p>
               </div>
-
-              <form onSubmit={handleSubmit} className="flex flex-wrap gap-2 md:gap-4 items-center">
-                <select
-                  value={model}
-                  onChange={(e) => setModel(e.target.value)}
-                  className="border rounded p-2 flex-1"
-                >
-                  {models.map((m) => (
-                    <option key={m} value={m}>{m}</option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="輸入你的問題"
-                  className="border rounded p-2 flex-1"
-                />
-                <label className="flex items-center gap-2 mr-4">
-                  <input
-                    type="checkbox"
-                    checked={useHistory}
-                    onChange={e => setUseHistory(e.target.checked)}
-                  />
-                  參考歷史查詢紀錄
-                </label>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-                >
-                  {loading ? <Loader /> : '查詢'}
-                </button>
-              </form>
-
-              {error && (
-                <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3">
-                  ⚠️ {error}
+                <div className="space-y-2">
+                  <textarea value={sql} onChange={(e) => setSql(e.target.value)} placeholder="SQL" className="w-full border rounded p-2 h-40 font-mono" />
+                  <button onClick={handleSqlExecute} disabled={loading || !sql.trim()} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">{loading ? <Loader /> : '執行 SQL'}</button>
                 </div>
-              )}
-
-              <div className="space-y-2">
-                <textarea
-                  value={sql}
-                  onChange={(e) => setSql(e.target.value)}
-                  placeholder="SQL"
-                  className="w-full border rounded p-2 h-40 font-mono"
-                />
-                <button
-                  onClick={handleSqlExecute}
-                  disabled={loading || !sql.trim()}
-                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-                >
-                  {loading ? <Loader /> : '執行 SQL'}
-                </button>
-              </div>
-
               {loading && (
                 <div className="flex items-center gap-2 text-blue-500">
                   <Loader />
                   <span>查詢中，請稍候...</span>
                 </div>
               )}
-
-              <FinalResponse
-                answer={answer}
-                summary={summary}
-                showFallback={Array.isArray(result) && result.length === 0}
-              />
-            </div>
-            <HistorySidebar history={history} clearHistory={clearHistory} openHistory={openHistory} />
+                <FinalResponse answer={answer} summary={summary} showFallback={Array.isArray(result) && result.length === 0} />
           </div>
         )}
-
-        {activeTab === 'chart' && (
+            {activeTab === 'table' && (
           <div className="space-y-4">
             {Array.isArray(result) && result.length > 0 && (
               <section className="bg-gray-100 p-4 rounded shadow-inner space-y-4">
@@ -276,12 +241,7 @@ const [useHistory, setUseHistory] = useState(true);
                     <thead className="bg-gray-100">
                       <tr>
                         {Object.keys(result[0]).map((key, idx) => (
-                          <th
-                            key={key}
-                            className={`border px-2 py-1 text-left font-semibold sticky top-0 bg-white ${idx === 0 ? 'left-0 z-10' : ''}`}
-                          >
-                            {key}
-                          </th>
+                              <th key={key} className={`border px-2 py-1 text-left font-semibold sticky top-0 bg-white ${idx === 0 ? 'left-0 z-10' : ''}`}>{key}</th>
                         ))}
                       </tr>
                     </thead>
@@ -289,12 +249,7 @@ const [useHistory, setUseHistory] = useState(true);
                       {result.map((row, idx) => (
                         <tr key={idx} className="even:bg-gray-50 hover:bg-gray-100">
                           {Object.values(row).map((val, i) => (
-                            <td
-                              key={i}
-                              className={`border px-2 py-1 ${i === 0 ? 'bg-white sticky left-0' : ''}`}
-                            >
-                              {String(val)}
-                            </td>
+                                <td key={i} className={`border px-2 py-1 ${i === 0 ? 'bg-white sticky left-0' : ''}`}>{String(val)}</td>
                           ))}
                         </tr>
                       ))}
@@ -303,12 +258,23 @@ const [useHistory, setUseHistory] = useState(true);
                 </div>
               </section>
             )}
-
+              </div>
+            )}
+            {activeTab === 'chart' && (
+              <div className="space-y-4">
             {Array.isArray(result) && result.length > 0 && <ChartView result={result} />}
           </div>
         )}
-
-        {activeTab === 'map' && <MapContainer />}
+            {activeTab === 'map' && (
+              <div>
+                <MapContainer />
+              </div>
+            )}
+          </div>
+          <div className="w-full md:w-72 flex-shrink-0">
+            <HistorySidebar history={history} clearHistory={clearHistory} openHistory={openHistory} deleteHistoryItem={deleteHistoryItem} />
+          </div>
+        </div>
       </div>
     </div>
   );

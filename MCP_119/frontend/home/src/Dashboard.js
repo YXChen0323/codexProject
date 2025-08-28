@@ -5,7 +5,7 @@ import FinalResponse from './FinalResponse';
 
 function Dashboard({ result, answer, summary, history, clearHistory, openHistory }) {
   return (
-    <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+    <div className="flex flex-row min-h-screen">
       <div className="flex-1 space-y-4">
         {Array.isArray(result) && result.length > 0 && (
           <section className="bg-gray-100 p-4 rounded shadow-inner space-y-4">

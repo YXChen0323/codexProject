@@ -8,9 +8,9 @@ class ModelRouter:
         # Mapping of task types to model names
         self.task_mapping: Dict[str, str] = {
             # qwen2.5-coder:7b handles user facing responses
-            "nlp": "gpt-oss:latest",
+            "model1": "gpt-oss:20b",
             # qwen2.5-coder:3b is a lightweight variant for simple NLP tasks
-            "nlp2": "qwen2.5-coder:7b",
+            "model2": "qwen2.5-coder:7b",
         }
         # Optional mapping of user IDs to preferred model names
         self.user_mapping: Dict[str, str] = {}
@@ -26,7 +26,7 @@ class ModelRouter:
         if task_type and task_type in self.task_mapping:
             return self.task_mapping[task_type]
         # Default model if nothing matches
-        return self.task_mapping["nlp"]
+        return self.task_mapping["model1"]
 
     def list_models(self) -> list[str]:
         """Return a list of all known model names."""
