@@ -1,0 +1,85 @@
+[33m2dc8125[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Format nginx configuration for improved readability
+[33mc9e0cdc[m Refactor logging setup, enhance model routing, and improve frontend components for better user experience
+[33m3e8d1fa[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m 修改提示詞
+[33mbe9ac3b[m 修正前端錯誤
+[33m940f158[m 參照歷史紀錄開關
+[33mc6d93ea[m log功能
+[33ma983e6e[m 修正資料量太大無法產生人性化回應的問題
+[33m5e8a4d5[m Added user clarification to only remove non-SQL content and symbols, but preserve the original SQL as much as possible. Updated the current goal to reflect this nuance.
+[33mcf63737[m 增加功能，若語言模型產生出來的並非純SQL，則加以清洗再呈現於前端
+[33me7b1b7e[m 修正提示詞以及刪減錯誤回應
+[33md50ec62[m fix: update OLLAMA_URL in .env and docker-compose.yaml to correct endpoint
+[33m2a572d5[m fix: update volume paths in docker-compose.yaml for nginx service and add init.sql for emergency_calls schema and data
+[33m5ec6ed3[m fix: update OLLAMA_URL in .env and adjust volume paths in docker-compose.yaml
+[33m625e837[m fix: update volume paths in docker-compose.yaml to use environment variable MCP_PATH
+[33m74bca1c[m fix: update port mappings in docker-compose.yaml for postgis and pgadmin services
+[33mf957b03[m fix: update volume paths in docker-compose.yaml to use relative paths
+[33m4c1f399[m feat: update OLLAMA_URL in environment files and import FinalResponse component
+[33m7c90599[m Merge pull request #116 from YXChen0323/codex/change-ui-to-button-sidebar-navigation
+[33m28fbc75[m[33m ([m[1;31morigin/codex/change-ui-to-button-sidebar-navigation[m[33m)[m feat: convert dashboard to sidebar navigation
+[33mb07860e[m Merge pull request #115 from YXChen0323/codex/create-popup-dashboard-for-charts-and-maps
+[33m90a32f6[m[33m ([m[1;31morigin/codex/create-popup-dashboard-for-charts-and-maps[m[33m)[m feat: add popup dashboard
+[33mdb2b016[m Merge pull request #114 from YXChen0323/codex/fix-map-center-and-zoom-level
+[33mbd2df53[m[33m ([m[1;31morigin/codex/fix-map-center-and-zoom-level[m[33m)[m Center map on US
+[33mb9c592a[m feat(frontend): add MapContainer component to display a map
+[33m74c072e[m Implement code changes to enhance functionality and improve performance
+[33mabe7a44[m Merge pull request #113 from YXChen0323/codex/integrate-openlayers-with-react
+[33m7ce8fa3[m[33m ([m[1;31morigin/codex/integrate-openlayers-with-react[m[33m)[m feat(frontend): add OpenLayers map
+[33m5f5afa5[m Merge pull request #112 from YXChen0323/lire75-codex
+[33m3d0be7e[m[33m ([m[1;31morigin/lire75-codex[m[33m)[m feat(frontend): unify dashboard and always show chart
+[33m851f43c[m Merge pull request #111 from YXChen0323/zj0p9m-codex/sql
+[33m32841df[m[33m ([m[1;31morigin/zj0p9m-codex/sql[m[33m)[m feat(frontend): add scrollable table with sticky columns
+[33m70e1ab1[m Merge branch 'main' of https://github.com/YXChen0323/codexProject
+[33m8a91d11[m fix: enhance prompt clarity and consistency in SQL and NLP templates
+[33m275131c[m Merge pull request #110 from YXChen0323/codex/display-charts-based-on-initial-query
+[33m9a4e10b[m[33m ([m[1;31morigin/codex/display-charts-based-on-initial-query[m[33m)[m Use first query results for answers
+[33m295ee8d[m Merge pull request #109 from YXChen0323/0tjm35-codex
+[33m9247259[m[33m ([m[1;31morigin/0tjm35-codex[m[33m)[m Update prompt templates to output in Traditional Chinese
+[33mc8b127d[m Merge pull request #108 from YXChen0323/zr6vlj-codex/update-readme-to-traditional-chinese
+[33m49e118e[m[33m ([m[1;31morigin/zr6vlj-codex/update-readme-to-traditional-chinese[m[33m)[m docs: translate main README to Traditional Chinese
+[33m16089a6[m Merge pull request #106 from YXChen0323/codex/update-readme-for-project-setup-instructions
+[33md0e88d7[m[33m ([m[1;31morigin/codex/update-readme-for-project-setup-instructions[m[33m)[m docs: update setup steps
+[33m4592f13[m Merge branch 'main' of https://github.com/YXChen0323/codexProject
+[33mbe30d3e[m fix: update dotenv path to use relative reference for consistency
+[33m310fdf4[m Merge pull request #105 from YXChen0323/codex/remove-gis-and-map-features
+[33m75da3fe[m[33m ([m[1;31morigin/codex/remove-gis-and-map-features[m[33m)[m Remove GIS and map features
+[33m0451502[m fix: update OLLAMA_URL to remove unnecessary API endpoint
+[33ma09b1db[m Merge pull request #104 from YXChen0323/codex/-readme.md
+[33m748e387[m[33m ([m[1;31morigin/codex/-readme.md[m[33m)[m Improve README
+[33m21173e7[m fix: load environment variables and update OLLAMA_URL for consistency across files
+[33mdbd1ec7[m fix: update OLLAMA_URL to use local IP for consistency and remove unused services from docker-compose
+[33m0e8f547[m fix: update OLLAMA_URL to use host.docker.internal for consistency across files
+[33m5a569a5[m Merge branch 'main' of https://github.com/YXChen0323/codexProject
+[33m53eddd5[m Update OLLAMA_URL to use host.docker.internal for local development
+[33md3624b8[m Merge pull request #103 from YXChen0323/codex/add-map-display-functionality
+[33m46749ec[m Fix task mapping for SQL model in ModelRouter and update database name in docker-compose.yaml
+[33mf1bf632[m[33m ([m[1;31morigin/codex/add-map-display-functionality[m[33m)[m feat(frontend): add map toggle
+[33m24a1dd9[m Fix task mapping for SQL model in ModelRouter and format docker-compose.yaml for consistency
+[33mf003b71[m Update database connection settings to use 'postgres' as the default database name and adjust schema references in SQL templates
+[33mf632b51[m Merge pull request #102 from YXChen0323/codex/-prompt_templates.py
+[33m37e0774[m[33m ([m[1;31morigin/codex/-prompt_templates.py[m[33m)[m Replace unicode escape sequences in prompts with plain Chinese
+[33m50a74b7[m Merge pull request #101 from YXChen0323/gtu05u-codex/sql
+[33m6f28d94[m[33m ([m[1;31morigin/gtu05u-codex/sql[m[33m)[m Show SQL editor by default
+[33m8a0a648[m Merge pull request #100 from YXChen0323/j7sx4q-codex/sql
+[33m3c75c44[m[33m ([m[1;31morigin/j7sx4q-codex/sql[m[33m)[m Update SQL prompt templates
+[33m245374d[m Merge pull request #99 from YXChen0323/azhmf0-codex
+[33m01a5028[m[33m ([m[1;31morigin/azhmf0-codex[m[33m)[m Remove sample rows dependency
+[33m2940094[m Merge pull request #98 from YXChen0323/c7k3si-codex/sql
+[33m465ad10[m[33m ([m[1;31morigin/c7k3si-codex/sql[m[33m)[m Enable LLM SQL generation via env flag
+[33m0c17ec2[m Update Docker Compose and Nginx configuration: add networks to services and correct proxy_pass to backend
+[33mccb8dbd[m Merge pull request #97 from YXChen0323/nnf4xx-codex
+[33m746137e[m Refactor Docker Compose configuration: rename postgres to postgis, update volume paths, and adjust service dependencies
+[33m524d745[m[33m ([m[1;31morigin/nnf4xx-codex[m[33m)[m Only show fallback text when no results
+[33m456199c[m Add GPU support to Ollama service in Docker Compose and fix Dockerfile formatting
+[33m6ca5b95[m Merge pull request #96 from YXChen0323/mewbll-codex/sql
+[33m79bbbf9[m[33m ([m[1;31morigin/mewbll-codex/sql[m[33m)[m Auto execute SQL on initial generation
+[33m59dfa0a[m Merge pull request #95 from YXChen0323/ckxerk-codex/sql
+[33m56c8009[m[33m ([m[1;31morigin/ckxerk-codex/sql[m[33m)[m Adjust SQL prompt generation
+[33m9c84eb2[m Merge branch 'main' of https://github.com/YXChen0323/codexProject
+[33me3e090c[m refactor: remove GPU resource reservations from Ollama service
+[33m9a670df[m Merge pull request #94 from YXChen0323/ey5brs-codex
+[33m0781dab[m[33m ([m[1;31morigin/ey5brs-codex[m[33m)[m feat(ui): add chart toggle and separate SQL generation
+[33mc2e245e[m feat: add GPU resource reservations for Ollama service
+[33mc2497b9[m Merge pull request #93 from YXChen0323/440cbl-codex
+[33mf722dc5[m[33m ([m[1;31morigin/440cbl-codex[m[33m)[m Remove forced follow-up question
+[33me090951[m Merge pull request #92 from YXChen0323/codex/-call_type-max_hospita
