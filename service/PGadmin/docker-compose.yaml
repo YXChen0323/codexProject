@@ -20,7 +20,7 @@ services:
     volumes:
       - ./volumes/pgadmin_data:/var/lib/pgadmin
     ports:
-      - "5057:80"
+      - "5050:80"
     depends_on:
       - postgis
 

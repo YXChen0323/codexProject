@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  sffd-sync:
+    build: ./sffd-sync
+    container_name: sffd-sync
+    environment:
+      - PG_DSN=postgresql://user:123456@postgis:5432/postgres
+      - SOCRATA_APP_TOKEN=OQmzcQpZcAq9A2Wn4WkkZiIeG
+    restart: unless-stopped

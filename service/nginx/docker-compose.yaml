@@ -6,4 +6,5 @@ services:
       - ../../MCP_119/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - ../../MCP_119/frontend/home/build:/usr/share/nginx/html:ro
     ports:
-      - "80:80"
+      - "3037:80"
+ 

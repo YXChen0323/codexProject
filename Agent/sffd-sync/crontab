@@ -1,0 +1,1 @@
+*/5 * * * * root python /app/sffd_sync.py >> /proc/1/fd/1 2>&1
